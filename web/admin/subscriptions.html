@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Subscriptions | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .main-content { margin-left: 300px; padding: 60px; }
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+        .plan-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        .plan-card:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+        }
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .plan-name { font-size: 1.5rem; font-weight: 800; color: white; }
+        .plan-price { font-size: 1.8rem; font-weight: 900; color: #FFEB3B; }
+        .plan-meta { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px; }
+        .plan-desc { color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; }
+        .plan-actions { display: flex; gap: 12px; margin-top: auto; }
+        
+        .btn-manage {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid transparent;
+        }
+
+        .btn-edit-plan {
+            background: rgba(99, 102, 241, 0.1);
+            color: #818CF8;
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-edit-plan:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -5px var(--primary-glow);
+        }
+
+        .btn-delete-plan {
+            background: rgba(244, 63, 94, 0.1);
+            color: #FB7185;
+            border-color: rgba(244, 63, 94, 0.2);
+        }
+
+        .btn-delete-plan:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -5px rgba(244, 63, 94, 0.4);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center; justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #0F172A;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 32px;
+            padding: 48px;
+            width: 90%;
+            max-width: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 64px;">RankForge Admin</div>
+            <nav style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <a href="dashboard.html" class="nav-item"><span>🏠</span> Overview</a>
+                <a href="users.html" class="nav-item"><span>👥</span> User Management</a>
+                <a href="tests-manage.html" class="nav-item"><span>📝</span> Mock Tests</a>
+                <a href="resolutions.html" class="nav-item"><span>🎟️</span> Support Tickets</a>
+                <a href="subscriptions.html" class="nav-item active"><span>💳</span> Subscription Plans</a>
+                <a href="study.html" class="nav-item"><span>📚</span> Study Content</a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 class="text-gradient" style="font-size: 2.5rem; display: flex; align-items: center; gap: 16px;">
+                        Subscription Plans
+                        <span style="font-size: 0.7rem; background: #4CAF50; color: white; padding: 4px 12px; border-radius: 100px; letter-spacing: 0.1em; font-weight: 900; vertical-align: middle;">LIVE</span>
+                    </h1>
+                    <p class="text-muted">Manage access levels and pricing tiers.</p>
+                </div>
+                <button class="btn-primary" onclick="openModal()">+ Create Plan</button>
+            </header>
+
+            <div id="plan-container" class="plan-grid">
+                <!-- Plans will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="plan-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title" style="margin-bottom: 32px; font-weight: 800; color: white;">Create Plan</h2>
+            <form id="plan-form">
+                <input type="hidden" id="plan-id">
+                <div class="input-group">
+                    <label>Plan Name</label>
+                    <input type="text" id="plan-name" placeholder="Monthly Pro" required>
+                </div>
+                <div class="input-group">
+                    <label>Price (INR)</label>
+                    <input type="number" id="plan-price" placeholder="499" required>
+                </div>
+                <div class="input-group">
+                    <label>Duration (Days)</label>
+                    <input type="number" id="plan-duration" placeholder="30" required>
+                </div>
+                <div class="input-group">
+                    <label>Description</label>
+                    <textarea id="plan-desc" rows="3" placeholder="Full access to all premium features..." required></textarea>
+                </div>
+                <div style="display: flex; gap: 16px; margin-top: 32px;">
+                    <button type="button" class="btn-secondary" style="flex: 1;" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary" style="flex: 1;">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/api.js?v=2.2"></script>
+    <script src="../js/auth.js?v=2.2"></script>
+    <script>
+        const token = localStorage.getItem('accessToken');
+        const user = Auth.getUser();
+
+        if (!Auth.isAuthenticated() || !user.is_staff) {
+            window.location.href = '../index.html';
+        }
+
+        async function fetchPlans() {
+            try {
+                const plans = await Api.get('/subscriptions/', token);
+                renderPlans(plans);
+            } catch (err) {
+                console.error('Failed to fetch plans:', err);
+            }
+        }
+
+        function renderPlans(plans) {
+            const container = document.getElementById('plan-container');
+            container.innerHTML = plans.map(plan => `
+                <div class="plan-card animate-fade-in">
+                    <div class="plan-header">
+                        <span class="plan-name">${plan.name}</span>
+                        <span class="plan-price">₹${plan.price}</span>
+                    </div>
+                    <div class="plan-meta">Duration: ${plan.duration_days} Days</div>
+                    <p class="plan-desc">${plan.description}</p>
+                    <div class="plan-actions">
+                        <button class="btn-manage btn-edit-plan" onclick="editPlan(${JSON.stringify(plan).replace(/"/g, '&quot;')})">
+                            <span>✏️</span> Edit
+                        </button>
+                        <button class="btn-manage btn-delete-plan" onclick="deletePlan(${plan.id})">
+                            <span>🗑️</span> Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openModal(plan = null) {
+            document.getElementById('modal-title').textContent = plan ? 'Edit Plan' : 'Create Plan';
+            document.getElementById('plan-id').value = plan ? plan.id : '';
+            document.getElementById('plan-name').value = plan ? plan.name : '';
+            document.getElementById('plan-price').value = plan ? plan.price : '';
+            document.getElementById('plan-duration').value = plan ? plan.duration_days : '';
+            document.getElementById('plan-desc').value = plan ? plan.description : '';
+            document.getElementById('plan-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('plan-modal').classList.remove('active');
+        }
+
+        function editPlan(plan) {
+            openModal(plan);
+        }
+
+        async function deletePlan(id) {
+            if (!confirm('Are you sure you want to delete this plan?')) return;
+            try {
+                await Api.delete('/admin/subscriptions/' + id + '/', token);
+                fetchPlans();
+            } catch (err) {
+                alert('Failed to delete plan');
+            }
+        }
+
+        document.getElementById('plan-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('plan-id').value;
+            const data = {
+                name: document.getElementById('plan-name').value,
+                price: parseFloat(document.getElementById('plan-price').value),
+                duration_days: parseInt(document.getElementById('plan-duration').value),
+                description: document.getElementById('plan-desc').value,
+                is_active: true
+            };
+
+            try {
+                if (id) {
+                    await Api.put('/admin/subscriptions/' + id + '/', data, token);
+                } else {
+                    await Api.post('/admin/subscriptions/', data, token);
+                }
+                closeModal();
+                fetchPlans();
+            } catch (err) {
+                alert('Failed to save plan');
+            }
+        };
+
+        window.onload = fetchPlans;
+    </script>
+</body>
+</html>

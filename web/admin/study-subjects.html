@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Management | RankForge Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .main-content { margin-left: 300px; padding: 60px; }
+        .study-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+        .subject-card {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .subject-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.05); }
+        .subject-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(79, 70, 229, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body class="midnight-aurora">
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 48px;">RankForge Admin</div>
+            <nav style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <a href="dashboard.html" class="nav-item"><span>🏠</span> Overview</a>
+                <a href="users.html" class="nav-item"><span>👥</span> User Management</a>
+                <a href="tests.html" class="nav-item"><span>📝</span> Mock Tests</a>
+                <a href="resolutions.html" class="nav-item"><span></span> Support Tickets</a>
+                <a href="subscriptions.html" class="nav-item"><span>💳</span> Subscription Plans</a>
+                <a href="study.html" class="nav-item active"><span>📚</span> Study Content</a>
+            </nav>
+
+            <div class="user-profile" style="margin-top: 32px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="width: 44px; height: 44px; background: var(--secondary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white;">A</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <p id="admin-sidebar-name" style="margin: 0; color: white; font-weight: 700; font-size: 0.85rem; white-space: nowrap; text-overflow: ellipsis;">Admin</p>
+                    <button onclick="Auth.logout()" style="background: none; border: none; padding: 0; color: var(--accent); font-size: 0.75rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-top: 4px;">
+                        <span>🚪</span> Log out
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <header>
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+                    <a href="study.html" class="text-muted" style="text-decoration: none;">← Back to Exams</a>
+                </div>
+                <h1 id="exam-title" class="text-gradient" style="font-size: 2.5rem;">Subjects</h1>
+                <p class="text-muted">Manage subjects within this exam category.</p>
+            </header>
+
+            <div id="subjects-container" class="study-grid">
+                <!-- Subjects will be loaded here -->
+            </div>
+            
+            <button class="btn btn-primary" style="margin-top: 40px; border-radius: 16px; padding: 16px 32px;" onclick="addSubject()">
+                + Add New Subject
+            </button>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const examId = params.get('id');
+        const examName = params.get('name');
+        
+        const user = Auth.getUser();
+        if (!Auth.isAuthenticated() || !user.is_staff) window.location.href = '../index.html';
+
+        if (examName) document.getElementById('exam-title').textContent = examName + ' Subjects';
+
+        async function loadSubjects() {
+            try {
+                const subjects = await Api.get(`/admin/study/subjects/?category_id=${examId}`, localStorage.getItem('accessToken'));
+                const container = document.getElementById('subjects-container');
+                
+                container.innerHTML = subjects.map(sub => `
+                    <div class="glass subject-card" onclick="window.location.href='study-topics.html?id=${sub.id}&name=${encodeURIComponent(sub.name)}'">
+                        <div class="subject-icon">📚</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0; color: white; font-size: 1.1rem;">${sub.name}</h3>
+                            <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-muted);">Manage topics</p>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Failed to load subjects:', err);
+            }
+        }
+
+        function addSubject() {
+            alert('Add Subject functionality coming soon');
+        }
+
+        window.onload = loadSubjects;
+    </script>
+</body>
+</html>

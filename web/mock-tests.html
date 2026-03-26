@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Explorer | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .main-content { margin-left: 300px; padding: 60px; }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .category-card {
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .category-card:hover { 
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .cat-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover .cat-icon {
+            background: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+            transform: rotate(10deg);
+        }
+
+        .test-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .test-card:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .test-info h4 { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
+        .sidebar-avatar { width: 44px; height: 44px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; box-shadow: 0 4px 12px var(--primary-glow); }
+        .user-profile { margin-top: auto; display: flex; align-items: center; gap: 16px; padding: 24px; background: rgba(255, 255, 255, 0.03); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 64px;">RankForge AI</div>
+            <a href="dashboard.html" class="nav-item">Dashboard</a>
+            <a href="mock-tests.html" class="nav-item active">Mock Tests</a>
+            <a href="history.html" class="nav-item">Test History</a>
+            <a href="profile.html" class="nav-item">My Profile</a>
+            <a href="tickets.html" class="nav-item">Support</a>
+            <a href="study-zone.html" class="nav-item">Study Zone</a>
+            <a href="chat.html" class="nav-item">AI Tutor</a>
+            
+            <div class="user-profile">
+                <div class="sidebar-avatar" id="user-avatar">?</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <button id="user-name" style="background: none; border: none; color: white; font-weight: 700; width: 100%; text-align: left; cursor: pointer; padding: 0;">User</button>
+                    <div id="sidebar-membership" class="text-muted" style="font-size: 0.75rem;">Standard Member</div>
+                </div>
+                <button onclick="Auth.logout()" style="background: none; border: none; cursor: pointer; font-size: 1.2rem;">🚪</button>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <header id="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 class="text-gradient" id="explorer-title">Exam Explorer</h2>
+                    <p class="text-muted" id="explorer-subtitle">Choose your target and begin the forge.</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div class="glass" style="padding: 10px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="location.href='streak.html'">
+                        <span style="font-weight: 700;">Streak: <span id="user-streak" style="color: var(--secondary);">0</span> Days</span>
+                    </div>
+                    <div class="glass" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;" onclick="location.href='notifications.html'">
+                        <span>🔔</span>
+                        <div id="notif-badge" style="position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; background: var(--secondary); border-radius: 50%; opacity: 0;"></div>
+                    </div>
+                </div>
+            </header>
+
+            <div id="content-container">
+                <div class="category-grid" id="category-list">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const categories = [
+            { id: 1, name: 'SSC Exams', icon: '🏛️', description: 'CGL, CHSL, MTS, Steno', locked: false },
+            { id: 2, name: 'Banking', icon: '🏦', description: 'SBI, IBPS, RBI Assistant', locked: true },
+            { id: 3, name: 'Railways', icon: '🚂', description: 'NTPC, Group D, ALP', locked: true },
+            { id: 4, name: 'Defense', icon: '🛡️', description: 'NDA, CDS, Airforce', locked: true }
+        ];
+
+        async function initExplorer() {
+            if (!Auth.isAuthenticated()) window.location.href = 'index.html';
+            
+            const token = localStorage.getItem('accessToken');
+            try {
+                const user = await Api.get('/profile/', token);
+                localStorage.setItem('user', JSON.stringify(user));
+
+                Auth.updateUserUI(user);
+
+                // Sync streak
+                const streakData = await Api.get('/streak/', token);
+                document.getElementById('user-streak').textContent = streakData.current_streak || 0;
+
+                renderCategories();
+            } catch (err) {
+                console.error('Failed to init explorer:', err);
+            }
+        }
+
+        function renderCategories() {
+            const list = document.getElementById('category-list');
+            list.innerHTML = '';
+            categories.forEach(cat => {
+                const card = document.createElement('div');
+                card.className = `glass category-card animate-fade-in ${cat.locked ? 'locked' : ''}`;
+                if (!cat.locked) {
+                    card.onclick = () => loadTests(cat.name);
+                } else {
+                    card.style.opacity = '0.5';
+                    card.style.cursor = 'not-allowed';
+                }
+                
+                card.innerHTML = `
+                    <div class="cat-icon">${cat.locked ? '🔒' : cat.icon}</div>
+                    <div style="font-weight: 800; font-size: 1.4rem;">${cat.name} ${cat.locked ? '<span style="font-size: 0.7rem; vertical-align: middle; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 6px; margin-left: 8px;">Coming Soon</span>' : ''}</div>
+                    <p class="text-muted" style="font-size: 0.95rem;">${cat.description}</p>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        async function loadTests(catName) {
+            const container = document.getElementById('content-container');
+            const header = document.getElementById('page-header');
+            
+            header.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 20px; cursor: pointer;" onclick="location.reload()">
+                    <div class="cat-icon" style="width: 48px; height: 48px; font-size: 1.2rem;">←</div>
+                    <div>
+                        <h2 class="text-gradient">${catName}</h2>
+                        <p class="text-muted">Available mock tests and papers.</p>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = '<p class="text-muted" style="text-align: center; padding: 60px;">Fetching test nodes...</p>';
+
+            try {
+                const tests = await Api.get('/tests/', localStorage.getItem('accessToken'));
+                renderTests(tests);
+            } catch (err) {
+                container.innerHTML = `<p style="color:var(--accent); text-align: center; padding: 60px;">Protocol Failure: ${err.message}</p>`;
+            }
+        }
+
+        function renderTests(tests) {
+            const container = document.getElementById('content-container');
+            container.innerHTML = '';
+            
+            if (!tests || tests.length === 0) {
+                container.innerHTML = '<p class="text-muted" style="text-align: center; padding: 60px;">No active test nodes found in this sector.</p>';
+                return;
+            }
+
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+            tests.forEach(test => {
+                const isAccessible = test.is_free || user.is_premium || test.is_unlocked_manually || test.order === 1;
+                
+                const card = document.createElement('div');
+                card.className = 'glass test-card animate-fade-in';
+                if (!isAccessible) {
+                    card.style.opacity = '0.7';
+                }
+
+                card.innerHTML = `
+                    <div class="test-info">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <h4>${test.name}</h4>
+                            ${!isAccessible ? '<span style="font-size: 1.2rem;">🔒</span>' : ''}
+                        </div>
+                        <div style="display: flex; gap: 12px; margin-top: 10px;">
+                            <span class="text-muted" style="font-size: 0.75rem;">${test.total_questions || 100} QUERIES</span>
+                            <span class="text-muted" style="font-size: 0.75rem;">•</span>
+                            <span class="text-muted" style="font-size: 0.75rem;">${test.duration_minutes || 60} MINUTES</span>
+                        </div>
+                    </div>
+                    <button class="btn-primary" 
+                            style="padding: 12px 24px; font-size: 0.9rem; ${!isAccessible ? 'background: rgba(255,255,255,0.1); cursor: not-allowed;' : ''}" 
+                            onclick="${isAccessible ? `startTest(${test.id})` : 'showLockedMessage()'}">
+                        ${isAccessible ? 'Initialize' : 'Locked'}
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function showLockedMessage() {
+            alert('This mock test is locked. Purchase a bundle or upgrade to Premium to unlock.');
+        }
+
+        function startTest(id) {
+            console.log('Initializing test node ID:', id);
+            sessionStorage.setItem('currentTestId', id);
+            console.log('Session storage set: currentTestId =', sessionStorage.getItem('currentTestId'));
+            setTimeout(() => {
+                window.location.href = `exam-mode.html`;
+            }, 100);
+        }
+
+        window.onload = initExplorer;
+    </script>
+</body>
+</html>

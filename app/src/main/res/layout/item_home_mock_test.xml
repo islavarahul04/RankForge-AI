@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="220dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bg_white_card"
+    android:elevation="2dp"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_blue_tag"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        tools:text="SSC CHSL"
+        android:textColor="#3654AD"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_clock"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@drawable/ic_clock"
+        app:layout_constraintBottom_toBottomOf="@id/tv_tag"
+        app:layout_constraintEnd_toStartOf="@+id/tv_time"
+        app:layout_constraintTop_toTopOf="@id/tv_tag" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="60m"
+        android:textColor="#8C98A4"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_tag"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_tag" />
+
+    <ImageView
+        android:id="@+id/iv_lock_home"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="@drawable/bg_locked_icon"
+        android:padding="6dp"
+        android:src="@drawable/ic_lock"
+        app:tint="#8C98A4"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_home_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textColor="#00C853"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:text="150/200"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_home_score_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score"
+        android:textColor="#B0BEC5"
+        android:textSize="10sp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_home_score" />
+
+    <TextView
+        android:id="@+id/tv_test_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        tools:text="Full Mock Test # 1"
+        android:textColor="#101820"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_tag" />
+
+    <TextView
+        android:id="@+id/tv_test_stats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="100 Questions • 200 Marks"
+        android:textColor="#8C98A4"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_test_title" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_start_test"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_outline_button"
+        android:text="Start Test"
+        android:textAllCaps="false"
+        android:textColor="#2663E2"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_test_stats" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

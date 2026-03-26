@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .tickets-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .ticket-item {
+            padding: 20px;
+            border-bottom: 1px solid #F0F4FC;
+            transition: background 0.2s ease;
+        }
+
+        .ticket-item:hover { background: #F8FAFF; }
+        .ticket-item:last-child { border-bottom: none; }
+
+        .status-badge {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .status-pending { background: #FFF3E0; color: #EF6C00; }
+        .status-resolved { background: #E8F5E9; color: #2E7D32; }
+
+        .ticket-subject { font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+        .ticket-meta { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: flex; justify-content: space-between; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 48px;">RankForge AI</div>
+            <a href="dashboard.html" class="nav-item">Dashboard</a>
+            <a href="mock-tests.html" class="nav-item">Mock Tests</a>
+            <a href="history.html" class="nav-item">Test History</a>
+            <a href="profile.html" class="nav-item">My Profile</a>
+            <a href="tickets.html" class="nav-item active">Support</a>
+            <a href="study-zone.html" class="nav-item">Study Zone</a>
+            <a href="chat.html" class="nav-item">AI Tutor</a>
+            
+            <div class="user-profile" style="margin-top: auto; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 20px;">
+                <div class="sidebar-avatar" id="sidebar-avatar">?</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <button id="sidebar-name" style="background: none; border: none; color: white; font-weight: 700; width: 100%; text-align: left; cursor: pointer; padding: 0;">Loading...</button>
+                    <div class="text-muted" style="font-size: 0.75rem;" id="sidebar-membership">Premium Member</div>
+                </div>
+                <button onclick="Auth.logout()" style="background: none; border: none; cursor: pointer; color: white; opacity: 0.5; font-size: 1.2rem;">🚪</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 class="text-gradient" style="font-size: 2.5rem;">Help & Support</h1>
+                    <p class="text-muted">Need help with something? Start a conversation with our team.</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div class="glass" style="padding: 10px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="location.href='streak.html'">
+                        <span style="font-weight: 700;">Streak: <span id="user-streak" style="color: var(--secondary);">0</span> Days</span>
+                    </div>
+                    <div class="glass" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;" onclick="location.href='notifications.html'">
+                        <span>🔔</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="tickets-layout" style="margin-top: 40px;">
+                <!-- Submit Form -->
+                <div class="glass animate-fade-in" style="padding: 32px;">
+                    <h3 style="color: white; margin-bottom: 8px;">New Support Ticket</h3>
+                    <p class="text-muted" style="margin-bottom: 32px; font-size: 0.9rem;">Submit your query and we'll get back to you within 24 hours.</p>
+
+                    <form id="ticket-form">
+                        <div class="input-group">
+                            <label>Query Summary (Subject)</label>
+                            <input type="text" id="subject" placeholder="e.g. Payment Issue" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Detailed Message</label>
+                            <textarea id="description" rows="5" style="width: 100%; padding: 16px 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 14px; color: white; font-size: 1rem; transition: all 0.3s ease; font-family: inherit; resize: none;" placeholder="Explain your issue in detail..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Submit Ticket</button>
+                    </form>
+                </div>
+
+                <!-- Ticket List -->
+                <div class="glass animate-fade-in" style="padding: 32px; animation-delay: 0.1s;">
+                    <h3 style="color: white; margin-bottom: 8px;">My Tickets</h3>
+                    <p class="text-muted" style="margin-bottom: 24px; font-size: 0.9rem;">Tracking your active and resolved queries.</p>
+                    
+                    <div id="tickets-container">
+                        <p class="text-muted" style="text-align: center; padding: 40px;">Loading your tickets...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        async function initSupport() {
+            if (!Auth.isAuthenticated()) window.location.href = 'index.html';
+            
+            const user = Auth.getUser();
+            Auth.updateUserUI(user);
+
+            await loadTickets();
+        }
+
+        async function loadTickets() {
+            const container = document.getElementById('tickets-container');
+            const token = localStorage.getItem('accessToken');
+            try {
+                // Correct Endpoint: /support/
+                const tickets = await Api.get('/support/', token);
+                if (!tickets || tickets.length === 0) {
+                    container.innerHTML = '<p class="text-muted" style="text-align: center; padding: 40px;">No tickets found. If you have an issue, submit a new one!</p>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                tickets.forEach(t => {
+                    const div = document.createElement('div');
+                    div.className = 'ticket-item glass';
+                    div.style.marginBottom = '12px';
+                    div.style.padding = '16px';
+                    div.style.borderRadius = '16px';
+                    div.style.border = '1px solid rgba(255,255,255,0.05)';
+                    
+                    const date = new Date(t.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    
+                    div.innerHTML = `
+                        <div class="ticket-subject" style="color: white; font-weight: 700; margin-bottom: 8px;">${t.message.split('\n')[0]}</div>
+                        <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4;">
+                            ${t.message.includes('\n') ? t.message.split('\n').slice(1).join(' ') : t.message}
+                        </div>
+                        <div class="ticket-meta">
+                            <span style="font-weight: 700;">#${t.id.toString().padStart(4, '0')} • ${date}</span>
+                            <span class="badge ${t.is_resolved ? 'badge-success' : 'badge-warning'}">${t.is_resolved ? 'RESOLVED' : 'PENDING'}</span>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (err) {
+                container.innerHTML = `<div class="glass" style="padding: 20px; border-color: rgba(244, 63, 94, 0.2);"><p style="color:var(--accent); text-align: center; font-weight: 700;">Error: ${err.message}</p></div>`;
+            }
+        }
+
+        document.getElementById('ticket-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Orchestrating Ticket...';
+
+            const subject = document.getElementById('subject').value;
+            const description = document.getElementById('description').value;
+
+            // Combine for backend message field
+            const payload = {
+                message: `[${subject}]\n${description}`
+            };
+
+            try {
+                // Correct Endpoint: /support/
+                await Api.post('/support/', payload, localStorage.getItem('accessToken'));
+                alert('Support request transmited successfully!');
+                document.getElementById('ticket-form').reset();
+                await loadTickets();
+            } catch (err) {
+                alert('Transmission failed: ' + err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        window.onload = initSupport;
+    </script>
+    <script>
+        async function syncStreak() {
+            try {
+                const token = localStorage.getItem('accessToken');
+                if (!token) return;
+                const streakData = await Api.get('/streak/', token);
+                const el = document.getElementById('user-streak');
+                if (el) el.textContent = streakData.current_streak || 0;
+            } catch (err) {}
+        }
+        window.addEventListener('load', syncStreak);
+    </script>
+</body>
+</html>

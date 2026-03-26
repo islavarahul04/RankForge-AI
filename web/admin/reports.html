@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Analytics | RankForge Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --admin-bg: #26348B;
+            --admin-card: rgba(255, 255, 255, 0.05);
+            --admin-glass: rgba(255, 255, 255, 0.1);
+            --admin-orange: #FF8C00;
+            --admin-text: #FFFFFF;
+            --admin-muted: #D0D5FF;
+        }
+
+        body {
+            background: var(--admin-bg);
+            color: var(--admin-text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .analytics-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 48px;
+        }
+
+        .btn-back-circle {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            margin-right: 20px;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        .report-card {
+            background: var(--admin-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .report-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .test-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--admin-orange);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 16px rgba(255, 140, 0, 0.2);
+        }
+
+        .stat-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--admin-muted);
+        }
+
+        /* Drill-down View Styling */
+        .drill-down-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 500px;
+            height: 100%;
+            background: #1A237E; /* Deeper blue for contrast */
+            box-shadow: -20px 0 60px rgba(0,0,0,0.5);
+            z-index: 2000;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .drill-down-overlay.active { right: 0; }
+
+        .result-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .score-display {
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: var(--admin-orange);
+        }
+
+        .close-drawer {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        .close-drawer:hover { opacity: 1; }
+
+        .loading-shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    </style>
+</head>
+<body>
+    <div class="analytics-container">
+        <div class="header-section animate-fade-in">
+            <div style="display: flex; align-items: center;">
+                <button class="btn-back-circle" onclick="location.href='dashboard.html'">
+                    <span style="font-size: 1.2rem;">⬅️</span>
+                </button>
+                <div>
+                    <h2 style="margin: 0; font-size: 1.8rem; font-weight: 900;">Intelligence Dashboard</h2>
+                    <p style="margin: 0; color: var(--admin-muted); font-size: 0.9rem;">Proper analytical breakdown reflecting full Android ecosystem telemetry.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="reports-loading" style="display: none; padding: 100px; text-align: center;">
+            <div class="loading-shimmer" style="height: 200px; border-radius: 32px; margin-bottom: 24px;"></div>
+            <p>Syncing analytics with primary cloud nodes...</p>
+        </div>
+
+        <div class="report-grid animate-fade-in" id="reports-grid">
+            <!-- Dynamic Report Cards -->
+        </div>
+    </div>
+
+    <!-- Drill-down Results Side Drawer -->
+    <div class="drill-down-overlay" id="results-drawer">
+        <button class="close-drawer" onclick="closeDrawer()">✕</button>
+        <h3 id="drawer-test-name" style="margin-bottom: 8px; font-size: 1.5rem;">Test Results</h3>
+        <p id="drawer-test-meta" style="color: var(--admin-muted); margin-bottom: 40px; font-size: 0.9rem;">Detailed performance breakdown.</p>
+        
+        <div id="results-container">
+            <!-- Dynamic Result Items -->
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        async function loadReports() {
+            const grid = document.getElementById('reports-grid');
+            const loader = document.getElementById('reports-loading');
+            
+            grid.style.display = 'none';
+            loader.style.display = 'block';
+
+            try {
+                const reports = await Api.get('/admin/reports/mock-tests/', localStorage.getItem('accessToken'));
+                renderReports(reports);
+            } catch (err) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; padding: 40px; text-align: center; color: #FF4D4D;">Telemetry Failure: ${err.message}</div>`;
+            } finally {
+                loader.style.display = 'none';
+                grid.style.display = 'grid';
+            }
+        }
+
+        function renderReports(reports) {
+            const grid = document.getElementById('reports-grid');
+            if (!reports || reports.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; padding: 100px; text-align: center;">No examination telemetry detected yet.</div>';
+                return;
+            }
+
+            grid.innerHTML = '';
+            reports.forEach(report => {
+                const card = document.createElement('div');
+                card.className = 'report-card';
+                card.onclick = () => openTestDetails(report.id, report.name);
+                
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div class="test-icon">📊</div>
+                        <div style="display: flex; flex-direction: column; gap: 4px; align-items: end;">
+                            <span class="stat-badge">${report.attempts_count} Attempts</span>
+                            <span class="stat-badge" style="background: var(--admin-orange); color: white;"> Avg ${report.average_score}%</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="margin: 0; font-size: 1.1rem; font-weight: 900;">${report.name}</h4>
+                        <p style="margin: 4px 0 0 0; color: var(--admin-muted); font-size: 0.8rem;">Performance analytics for this deployment.</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        async function openTestDetails(testId, testName) {
+            const drawer = document.getElementById('results-drawer');
+            const container = document.getElementById('results-container');
+            
+            document.getElementById('drawer-test-name').textContent = testName;
+            container.innerHTML = '<div class="loading-shimmer" style="height: 100px; border-radius: 20px;"></div>';
+            drawer.classList.add('active');
+
+            try {
+                const response = await Api.get(`/admin/reports/test-details/${testId}/`, localStorage.getItem('accessToken'));
+                renderDetails(response.results);
+            } catch (err) {
+                container.innerHTML = `<p style="color: #FF4D4D;">Data Corruption: ${err.message}</p>`;
+            }
+        }
+
+        function renderDetails(results) {
+            const container = document.getElementById('results-container');
+            if (!results || results.length === 0) {
+                container.innerHTML = '<p>No individual records for this sector.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            results.forEach(res => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                item.innerHTML = `
+                    <div class="user-meta">
+                        <span style="font-weight: 800; font-size: 1rem;">${res.userName || res.user_name || 'Inquisitive User'}</span>
+                        <span style="font-size: 0.75rem; color: var(--admin-muted);">${res.date}</span>
+                    </div>
+                    <div class="score-display">${res.score}</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function closeDrawer() {
+            document.getElementById('results-drawer').classList.remove('active');
+        }
+
+        window.onload = () => {
+            if (!Auth.isAuthenticated()) location.href = '../index.html';
+            loadReports();
+        }
+    </script>
+</body>
+</html>

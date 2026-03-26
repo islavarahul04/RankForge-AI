@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic Concept | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .concept-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .btn-back-circle {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-back-circle:hover { transform: scale(1.1); }
+
+        .content-card {
+            padding: 48px;
+            border-radius: 32px;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theory-text, .formulas-text {
+            line-height: 1.8;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            white-space: pre-line;
+        }
+
+        .example-block {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .example-question {
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            font-size: 1.05rem;
+        }
+
+        .example-solution {
+            padding: 16px;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 12px;
+            border-left: 4px solid var(--success);
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.05);
+            margin: 40px 0;
+        }
+
+        .badge-sector {
+            padding: 6px 16px;
+            background: rgba(168, 85, 247, 0.1);
+            color: #A855F7;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 48px;">RankForge AI</div>
+            <a href="dashboard.html" class="nav-item">Dashboard</a>
+            <a href="mock-tests.html" class="nav-item">Mock Tests</a>
+            <a href="history.html" class="nav-item">Test History</a>
+            <a href="profile.html" class="nav-item">My Profile</a>
+            <a href="tickets.html" class="nav-item">Support</a>
+            <a href="study-zone.html" class="nav-item active">Study Zone</a>
+            <a href="chat.html" class="nav-item">AI Tutor</a>
+            
+            <div class="user-profile" style="margin-top: auto; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 20px;">
+                <div class="sidebar-avatar" id="sidebar-avatar">?</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <button id="sidebar-name" style="background: none; border: none; color: white; font-weight: 700; width: 100%; text-align: left; cursor: pointer; padding: 0;">Loading...</button>
+                    <div class="text-muted" style="font-size: 0.75rem;" id="sidebar-membership">Premium Member</div>
+                </div>
+                <button onclick="Auth.logout()" style="background: none; border: none; cursor: pointer; color: white; opacity: 0.5; font-size: 1.2rem;">🚪</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="concept-container">
+                <div class="header-section animate-fade-in">
+                    <button class="btn-back-circle" onclick="location.href='study-zone.html'">
+                        <span style="font-size: 1.2rem;">⬅️</span>
+                    </button>
+                    <div>
+                        <div class="badge-sector" id="subject-name">Subject Name</div>
+                        <h1 id="topic-title" class="text-gradient" style="font-size: 2.5rem; margin-top: 8px;">Topic Analysis</h1>
+                    </div>
+                </div>
+
+                <div class="glass content-card animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="section-title">
+                        <span>📘</span> Theory & Concept
+                    </div>
+                    <div id="theory-content" class="theory-text">
+                        Calibrating intelligence for this sector...
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="section-title">
+                        <span>📐</span> Formulas & Identities
+                    </div>
+                    <div id="formulas-content" class="formulas-text">
+                        Extracting core logic...
+                    </div>
+                </div>
+
+                <div class="glass content-card animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="section-title">
+                        <span>💡</span> Example Problems
+                    </div>
+                    <div id="examples-container">
+                        <!-- Examples will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/topic-concept.js"></script>
+</body>
+</html>

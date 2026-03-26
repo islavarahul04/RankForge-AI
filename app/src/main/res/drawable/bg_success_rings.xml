@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer teal ring -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#4D00BFA5"/>
+            <size android:width="160dp" android:height="160dp"/>
+        </shape>
+    </item>
+    <!-- Inner bright green -->
+    <item android:gravity="center">
+        <shape android:shape="oval">
+            <solid android:color="#1DD1A1"/>
+            <size android:width="100dp" android:height="100dp"/>
+        </shape>
+    </item>
+</layer-list>

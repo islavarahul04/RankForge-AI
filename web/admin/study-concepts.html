@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concept Editor | RankForge Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .main-content { margin-left: 300px; padding: 60px; max-width: 1200px; }
+        .editor-container { margin-top: 40px; display: flex; flex-direction: column; gap: 32px; }
+        .form-group { display: flex; flex-direction: column; gap: 12px; }
+        .form-group label { font-weight: 700; color: white; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        textarea, input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        textarea:focus { outline: none; border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
+        .example-block {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+        }
+        .btn-remove {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: rgba(244, 67, 54, 0.1);
+            color: #F44336;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="midnight-aurora">
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 48px;">RankForge Admin</div>
+            <nav style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <a href="dashboard.html" class="nav-item"><span>🏠</span> Overview</a>
+                <a href="users.html" class="nav-item"><span>👥</span> User Management</a>
+                <a href="tests.html" class="nav-item"><span>📝</span> Mock Tests</a>
+                <a href="resolutions.html" class="nav-item"><span></span> Support Tickets</a>
+                <a href="subscriptions.html" class="nav-item"><span>💳</span> Subscription Plans</a>
+                <a href="study.html" class="nav-item active"><span>📚</span> Study Content</a>
+            </nav>
+
+            <div class="user-profile" style="margin-top: 32px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="width: 44px; height: 44px; background: var(--secondary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white;">A</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <p id="admin-sidebar-name" style="margin: 0; color: white; font-weight: 700; font-size: 0.85rem; white-space: nowrap; text-overflow: ellipsis;">Admin</p>
+                    <button onclick="Auth.logout()" style="background: none; border: none; padding: 0; color: var(--accent); font-size: 0.75rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-top: 4px;">
+                        <span>🚪</span> Log out
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <header>
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+                    <a href="javascript:history.back()" class="text-muted" style="text-decoration: none;">← Back to Topics</a>
+                </div>
+                <h1 id="topic-title" class="text-gradient" style="font-size: 2.5rem;">Edit Concept</h1>
+                <p class="text-muted">Revise theory, formulas, and example problems.</p>
+            </header>
+
+            <div class="editor-container">
+                <div class="form-group">
+                    <label>Theory</label>
+                    <textarea id="theory-input" rows="8" placeholder="Enter elaborate theory content..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Formulas</label>
+                    <textarea id="formulas-input" rows="4" placeholder="Enter key formulas..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Example Problems</label>
+                    <div id="examples-list">
+                        <!-- Dynamic examples -->
+                    </div>
+                </div>
+
+                <button class="btn" style="background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); width: 100%; padding: 20px; border-radius: 16px; color: white;" onclick="addExample()">
+                    + Add Example Problem
+                </button>
+
+                <button class="btn btn-primary" style="margin-top: 40px; padding: 20px; border-radius: 20px; font-weight: 800; font-size: 1.1rem; box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);" onclick="saveConcept()">
+                    Save Concept Changes
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const topicData = JSON.parse(localStorage.getItem('editingTopic') || '{}');
+        const user = Auth.getUser();
+        if (!Auth.isAuthenticated() || !user.is_staff) window.location.href = '../index.html';
+
+        if (topicData.name) document.getElementById('topic-title').textContent = 'Edit: ' + topicData.name;
+        document.getElementById('theory-input').value = topicData.theory || '';
+        document.getElementById('formulas-input').value = topicData.formulas || '';
+
+        const examplesList = document.getElementById('examples-list');
+
+        function renderExamples() {
+            examplesList.innerHTML = (topicData.examples || []).map((ex, idx) => `
+                <div class="example-block glass" data-index="${idx}">
+                    <button class="btn-remove" onclick="removeExample(${idx})">Remove</button>
+                    <div class="form-group">
+                        <label style="font-size: 0.75rem; opacity: 0.6;">Question</label>
+                        <input type="text" class="ex-q" value="${ex.question}" placeholder="Example question...">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size: 0.75rem; opacity: 0.6;">Solution</label>
+                        <textarea class="ex-s" rows="3" placeholder="Step-by-step solution...">${ex.solution}</textarea>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addExample() {
+            if (!topicData.examples) topicData.examples = [];
+            topicData.examples.push({ question: '', solution: '' });
+            renderExamples();
+        }
+
+        function removeExample(idx) {
+            topicData.examples.splice(idx, 1);
+            renderExamples();
+        }
+
+        async function saveConcept() {
+            const theory = document.getElementById('theory-input').value;
+            const formulas = document.getElementById('formulas-input').value;
+            
+            const examples = [];
+            document.querySelectorAll('.example-block').forEach(block => {
+                const q = block.querySelector('.ex-q').value;
+                const s = block.querySelector('.ex-s').value;
+                if (q.trim()) examples.push({ question: q, solution: s });
+            });
+
+            const payload = {
+                ...topicData,
+                theory,
+                formulas,
+                examples
+            };
+
+            try {
+                await Api.put(`/admin/study/topics/${topicData.id}/`, payload, localStorage.getItem('accessToken'));
+                alert('Concept updated successfully!');
+                history.back();
+            } catch (err) {
+                alert('Failed to save changes');
+            }
+        }
+
+        renderExamples();
+    </script>
+</body>
+</html>

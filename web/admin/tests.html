@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert Mock Test Creator | RankForge Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --admin-bg: #26348B;
+            --admin-card: rgba(255, 255, 255, 0.05);
+            --admin-glass: rgba(255, 255, 255, 0.1);
+            --admin-orange: #FF8C00;
+            --admin-text: #FFFFFF;
+            --admin-muted: #D0D5FF;
+        }
+
+        body {
+            background: var(--admin-bg);
+            color: var(--admin-text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .creator-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .btn-back-circle {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-back-circle:hover { transform: scale(1.1); }
+
+        .form-card {
+            background: var(--admin-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 32px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .input-label {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            display: block;
+            color: var(--admin-text);
+        }
+
+        .premium-input {
+            width: 100%;
+            background: var(--admin-glass);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 24px;
+            transition: all 0.3s;
+        }
+
+        .premium-input:focus {
+            outline: none;
+            border-color: var(--admin-orange);
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Tabs Styling */
+        .section-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .tab-item {
+            padding: 12px 24px;
+            background: var(--admin-glass);
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .tab-item.active {
+            background: white;
+            color: var(--admin-bg);
+        }
+
+        .tab-item:not(.active):hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Question Block */
+        .question-block {
+            background: rgba(255,255,255,0.03);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .q-number {
+            background: var(--admin-orange);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .btn-remove-q {
+            background: none;
+            border: none;
+            color: #FF4D4D;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.05);
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1px solid transparent;
+        }
+
+        .option-item.correct {
+            border-color: var(--admin-orange);
+            background: rgba(255, 140, 0, 0.1);
+        }
+
+        .option-radio {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--admin-orange);
+        }
+
+        .option-input {
+            background: none;
+            border: none;
+            color: white;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        .option-input:focus { outline: none; }
+
+        .btn-add-next {
+            width: 100%;
+            background: var(--admin-glass);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 16px;
+            color: var(--admin-muted);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 12px;
+        }
+
+        .btn-add-next:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: white;
+            color: white;
+        }
+
+        .footer-actions {
+            position: sticky;
+            bottom: 24px;
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .btn-publish {
+            flex: 1;
+            background: var(--admin-orange);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .btn-publish:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(255, 140, 0, 0.4);
+        }
+
+        .btn-publish:disabled {
+            opacity: 0.5;
+            transform: none;
+        }
+
+        .btn-json-mode {
+            padding: 18px 32px;
+            background: var(--admin-glass);
+            color: white;
+            border-radius: 100px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        /* Sector Containers */
+        .sector-container { display: none; }
+        .sector-container.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="creator-container">
+        <div class="header-section animate-fade-in">
+            <button class="btn-back-circle" onclick="location.href='tests-manage.html'">
+                <span style="font-size: 1.2rem;">⬅️</span>
+            </button>
+            <div style="flex: 1; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 style="margin: 0; font-size: 1.8rem; font-weight: 900;">Create Mock Test</h2>
+                    <p style="margin: 0; color: var(--admin-muted); font-size: 0.9rem;">Proper management suite for high-fidelity examination deployment.</p>
+                </div>
+                <button onclick="Auth.logout()" class="btn-json-mode" style="padding: 10px 24px; font-size: 0.8rem; background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.2); color: #FF4444;">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="form-card animate-fade-in">
+            <label class="input-label">Test Title</label>
+            <input type="text" id="test-title" class="premium-input" placeholder="e.g. SSC CHSL Full Mock Test #12">
+            
+            <div class="section-tabs" id="category-tabs">
+                <div class="tab-item active" onclick="switchSection('English')">English Language</div>
+                <div class="tab-item" onclick="switchSection('Intelligence')">General Intelligence</div>
+                <div class="tab-item" onclick="switchSection('Quantitative')">Quantitative Aptitude</div>
+                <div class="tab-item" onclick="switchSection('Awareness')">General Awareness</div>
+            </div>
+
+            <div id="english-container" class="sector-container active"></div>
+            <div id="intelligence-container" class="sector-container"></div>
+            <div id="quantitative-container" class="sector-container"></div>
+            <div id="awareness-container" class="sector-container"></div>
+
+            <button class="btn-add-next" onclick="addNewQuestion()">+ Add Next Question</button>
+        </div>
+
+        <div class="footer-actions animate-fade-in">
+            <button class="btn-json-mode" onclick="toggleFastMode()">Fast Mode (JSON)</button>
+            <button class="btn-publish" id="publish-trigger" onclick="publishTest()">Send  ➔</button>
+        </div>
+
+        <!-- Fast Mode Modal (JSON) -->
+        <div id="fast-mode-overlay" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+            <div class="form-card" style="width: 100%; max-width: 800px; margin: 0;">
+                <h3>Fast Deployment Protocol</h3>
+                <p class="text-muted" style="margin-bottom: 24px;">Paste raw JSON data for massive bulk uploads.</p>
+                <textarea id="bulk-json" class="premium-input" style="height: 400px; font-family: monospace; font-size: 0.8rem;" placeholder='[ { "text": "...", "a": "...", "b": "...", "c": "...", "d": "...", "correct": 0, "section": "English" } ]'></textarea>
+                <div style="display: flex; gap: 16px;">
+                    <button class="btn-publish" onclick="processBulk()">Import & Sync</button>
+                    <button class="btn-json-mode" onclick="toggleFastMode()" style="background: rgba(255,255,255,0.05);">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js?v=2.0"></script>
+    <script src="../js/auth.js?v=2.0"></script>
+    <script>
+        let currentSection = 'English';
+        const sections = ['English', 'Intelligence', 'Quantitative', 'Awareness'];
+        const containers = {
+            'English': document.getElementById('english-container'),
+            'Intelligence': document.getElementById('intelligence-container'),
+            'Quantitative': document.getElementById('quantitative-container'),
+            'Awareness': document.getElementById('awareness-container')
+        };
+
+        function switchSection(section) {
+            currentSection = section;
+            
+            // Update Tabs
+            document.querySelectorAll('.tab-item').forEach(tab => {
+                tab.classList.toggle('active', tab.textContent.includes(section));
+            });
+
+            // Update Containers
+            Object.values(containers).forEach(c => c.classList.remove('active'));
+            containers[section].classList.add('active');
+        }
+
+        function createQuestionElement(number, data = null) {
+            const div = document.createElement('div');
+            div.className = 'question-block animate-fade-in';
+            div.innerHTML = `
+                <div class="q-header">
+                    <span class="q-number">Question ${number}</span>
+                    <button class="btn-remove-q" onclick="this.parentElement.parentElement.remove(); renumberQuestions()">Remove</button>
+                </div>
+                <textarea class="premium-input q-text" placeholder="Enter question text here..." style="height: 100px; margin-bottom: 16px;">${data ? data.text : ''}</textarea>
+                <div class="options-grid">
+                    <div class="option-item ${data && data.correct === 0 ? 'correct' : ''}">
+                        <input type="radio" name="correct_${number}_${currentSection}" class="option-radio" ${data && data.correct === 0 ? 'checked' : ''}>
+                        <input type="text" class="option-input opt-a" placeholder="Option A" value="${data ? data.a : ''}">
+                    </div>
+                    <div class="option-item ${data && data.correct === 1 ? 'correct' : ''}">
+                        <input type="radio" name="correct_${number}_${currentSection}" class="option-radio" ${data && data.correct === 1 ? 'checked' : ''}>
+                        <input type="text" class="option-input opt-b" placeholder="Option B" value="${data ? data.b : ''}">
+                    </div>
+                    <div class="option-item ${data && data.correct === 2 ? 'correct' : ''}">
+                        <input type="radio" name="correct_${number}_${currentSection}" class="option-radio" ${data && data.correct === 2 ? 'checked' : ''}>
+                        <input type="text" class="option-input opt-c" placeholder="Option C" value="${data ? data.c : ''}">
+                    </div>
+                    <div class="option-item ${data && data.correct === 3 ? 'correct' : ''}">
+                        <input type="radio" name="correct_${number}_${currentSection}" class="option-radio" ${data && data.correct === 3 ? 'checked' : ''}>
+                        <input type="text" class="option-input opt-d" placeholder="Option D" value="${data ? data.d : ''}">
+                    </div>
+                </div>
+            `;
+
+            // Radio visual sync
+            div.querySelectorAll('input[type="radio"]').forEach((rb, idx) => {
+                rb.onchange = () => {
+                    div.querySelectorAll('.option-item').forEach((item, i) => {
+                        item.classList.toggle('correct', i === idx);
+                    });
+                };
+            });
+
+            return div;
+        }
+
+        function addNewQuestion(data = null) {
+            const container = containers[currentSection];
+            const number = container.children.length + 1;
+            container.appendChild(createQuestionElement(number, data));
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function renumberQuestions() {
+            Object.values(containers).forEach(container => {
+                Array.from(container.children).forEach((block, idx) => {
+                    block.querySelector('.q-number').textContent = `Question ${idx + 1}`;
+                });
+            });
+        }
+
+        function toggleFastMode() {
+            const el = document.getElementById('fast-mode-overlay');
+            el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function processBulk() {
+            try {
+                const data = JSON.parse(document.getElementById('bulk-json').value);
+                // Clear all
+                Object.values(containers).forEach(c => c.innerHTML = '');
+                
+                data.forEach(q => {
+                    const section = q.section || 'English';
+                    const target = containers[section] || containers['English'];
+                    currentSection = section; // Temporary shift for createQuestionElement
+                    target.appendChild(createQuestionElement(target.children.length + 1, q));
+                });
+
+                renumberQuestions();
+                toggleFastMode();
+                alert('Success: ' + data.length + ' questions imported and synced.');
+            } catch (e) {
+                alert('Invalid JSON structure: ' + e.message);
+            }
+        }
+
+        async function publishTest() {
+            const title = document.getElementById('test-title').value;
+            if (!title) return alert('Enter a test title first.');
+
+            const trigger = document.getElementById('publish-trigger');
+            trigger.disabled = true;
+            trigger.textContent = 'Transmitting Data...';
+
+            const allQuestions = [];
+            let globalOrder = 1;
+
+            sections.forEach(section => {
+                const container = containers[section];
+                Array.from(container.children).forEach((block, idx) => {
+                    const radios = block.querySelectorAll('input[type="radio"]');
+                    let correct = -1;
+                    radios.forEach((r, i) => { if (r.checked) correct = i; });
+
+                    allQuestions.push({
+                        text: block.querySelector('.q-text').value,
+                        a: block.querySelector('.opt-a').value,
+                        b: block.querySelector('.opt-b').value,
+                        c: block.querySelector('.opt-c').value,
+                        d: block.querySelector('.opt-d').value,
+                        correct: correct,
+                        section: section,
+                        order: globalOrder++
+                    });
+                });
+            });
+
+            if (allQuestions.length === 0) {
+                trigger.disabled = false;
+                trigger.textContent = 'Send  ➔';
+                return alert('Add at least one question.');
+            }
+
+            // Validation
+            for (let q of allQuestions) {
+                if (!q.text || !q.a || !q.b || !q.c || !q.d || q.correct === -1) {
+                    trigger.disabled = false;
+                    trigger.textContent = 'Send  ➔';
+                    return alert('Incomplete data detected. Ensure all questions and options are filled, and a correct answer is selected.');
+                }
+            }
+
+            try {
+                const payload = {
+                    title: title,
+                    is_active: true,
+                    questions: allQuestions
+                };
+
+                await Api.post('/admin/tests/create/', payload, localStorage.getItem('accessToken'));
+                alert('Success: Mission Complete. Test published and live.');
+                location.href = 'dashboard.html';
+            } catch (err) {
+                alert('Publish Failure: ' + err.message);
+            } finally {
+                trigger.disabled = false;
+                trigger.textContent = 'Send  ➔';
+            }
+        }
+
+        window.onload = () => {
+            if (!Auth.isAuthenticated()) location.href = '../index.html';
+            // Add initial empty questions
+            addNewQuestion();
+        }
+    </script>
+</body>
+</html>

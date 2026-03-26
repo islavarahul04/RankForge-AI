@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .admin-sidebar { background: #1A237E; }
+        
+        .user-table-container {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            margin-top: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            padding: 16px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: 2px solid #F0F4FC;
+        }
+
+        td {
+            padding: 16px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #F0F4FC;
+            font-weight: 600;
+        }
+
+        tr:hover { background: #F8FAFF; }
+
+        .search-bar {
+            padding: 12px 20px;
+            background: white;
+            border: 1px solid #F0F4FC;
+            border-radius: 12px;
+            width: 300px;
+            font-family: inherit;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            margin-right: 4px;
+        }
+
+        .btn-edit { background: #E3F2FD; color: #1976D2; }
+        .btn-unlock { background: #E8F5E9; color: #2E7D32; }
+        .btn-lock { background: #FFEBEE; color: #C62828; }
+
+        /* Modal System */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: none;
+            align-items: center; justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #0F172A;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 32px;
+            padding: 48px;
+            width: 90%;
+            max-width: 500px;
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .select-group { margin-bottom: 24px; }
+        .select-group label { display: block; margin-bottom: 12px; font-weight: 700; color: white; }
+        .custom-select {
+            width: 100%; padding: 16px; background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 14px;
+            color: white; font-size: 1rem; cursor: pointer;
+        }
+        .custom-select option { background: #0F172A; color: white; }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar admin-sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 48px;">RankForge Admin</div>
+            <nav style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <a href="dashboard.html" class="nav-item"><span>🏠</span> Overview</a>
+                <a href="users.html" class="nav-item active"><span>👥</span> User Management</a>
+                <a href="tests-manage.html" class="nav-item"><span>📝</span> Mock Tests</a>
+                <a href="resolutions.html" class="nav-item"><span>🎟️</span> Support Tickets</a>
+                <a href="subscriptions.html" class="nav-item"><span>💳</span> Subscription Plans</a>
+                <a href="study.html" class="nav-item"><span>📚</span> Study Content</a>
+            </nav>
+            
+            <div class="user-profile" style="margin-top: 32px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="width: 44px; height: 44px; background: var(--secondary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white;">A</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <p id="sidebar-admin-name" style="margin: 0; color: white; font-weight: 700; font-size: 0.85rem; white-space: nowrap; text-overflow: ellipsis;">Admin</p>
+                    <button onclick="Auth.logout()" style="background: none; border: none; padding: 0; color: var(--accent); font-size: 0.75rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-top: 4px;">
+                        <span>🚪</span> Log out
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2>User Directory</h2>
+                    <p class="text-muted">Manage user accounts, permissions, and accessibility.</p>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <div class="tabs-container" style="display: flex; background: #F0F4FC; padding: 4px; border-radius: 100px;">
+                        <button class="tab-btn active" onclick="setFilter('All')">All</button>
+                        <button class="tab-btn" onclick="setFilter('Active')">Active</button>
+                        <button class="tab-btn" onclick="setFilter('Pro')">Pro</button>
+                        <button class="tab-btn" onclick="setFilter('Banned')">Banned</button>
+                    </div>
+                    <input type="text" class="search-bar" placeholder="Search..." id="user-search" onkeyup="filterUsers()">
+                </div>
+            </header>
+
+            <div class="user-table-container">
+                <table id="users-table">
+                    <thead>
+                        <tr>
+                            <th>User Details</th>
+                            <th>Status</th>
+                            <th>Tests Taken</th>
+                            <th>Join Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-tbody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);">Fetching users...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Access Modal (Unlock/Lock) -->
+    <div id="access-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-action-title" style="margin-bottom: 24px; font-weight: 800; color: white;">Grant Test Access</h2>
+            <p class="text-muted" style="margin-bottom: 32px;"><span id="modal-action-desc">Select a specific mock test to unlock for</span> <span id="target-user-email" style="color: var(--primary); font-weight: 700;"></span>.</p>
+            
+            <div class="select-group">
+                <label>Identify Mock Test</label>
+                <select id="test-selector" class="custom-select">
+                    <option value="">Choose a test...</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 16px; margin-top: 40px;">
+                <button class="btn-secondary" style="flex: 1;" onclick="closeAccessModal()">Cancel</button>
+                <button id="confirm-btn" class="btn-primary" style="flex: 1;" onclick="confirmAccessAction()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js?v=2.2"></script>
+    <script src="../js/auth.js?v=2.2"></script>
+    <script>
+        let allUsers = [];
+        let currentFilter = 'All';
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === filter) btn.classList.add('active');
+            });
+            filterUsers();
+        }
+
+        async function initUsers() {
+            const user = Auth.getUser();
+            if (!Auth.isAuthenticated() || !user.is_staff) {
+                window.location.href = '../index.html';
+                return;
+            }
+            document.getElementById('sidebar-admin-name').textContent = user.full_name || user.email;
+
+            await loadUsers();
+        }
+
+        async function loadUsers() {
+            const tbody = document.getElementById('users-tbody');
+            try {
+                // Fetch user list from backend
+                const users = await Api.get('/admin/users/', localStorage.getItem('accessToken'));
+                allUsers = users;
+                renderUsers(users);
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Error: ${err.message}</td></tr>`;
+            }
+        }
+
+        function renderUsers(users) {
+            const tbody = document.getElementById('users-tbody');
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No users found.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = '';
+            users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = 'animate-fade-in';
+                const dateJoined = new Date(u.date_joined).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                
+                const statusDot = u.is_duplicate ? '<span style="display: inline-block; width: 8px; height: 8px; background: #FF4444; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 10px rgba(255,68,68,0.5);" title="Duplicate Name Detected"></span>' : '';
+                const activeDot = u.is_active ? '<span style="color: #4CAF50; margin-right: 4px;">●</span>' : '<span style="color: #F44336; margin-right: 4px;">●</span>';
+
+                tr.innerHTML = `
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                            ${statusDot}
+                            <div>
+                                <div style="font-weight: 800;">${u.full_name || 'Anonymous User'}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">${u.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                            ${activeDot}
+                            <span class="badge ${u.is_premium ? 'badge-success' : 'badge-warning'}">
+                                ${u.is_admin ? 'Admin' : (u.is_premium ? 'Premium' : 'Free')}
+                            </span>
+                        </div>
+                    </td>
+                    <td style="text-align: center;">${u.tests_attempted || 0}</td>
+                    <td>${dateJoined}</td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-action btn-unlock" onclick="openAccessModal('${u.email}', 'unlock')">🔓 Unlock</button>
+                            <button class="btn-action btn-lock" onclick="openAccessModal('${u.email}', 'lock')">🔒 Lock</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterUsers() {
+            const query = document.getElementById('user-search').value.toLowerCase();
+            let filtered = allUsers.filter(u => 
+                (u.full_name && u.full_name.toLowerCase().includes(query)) || 
+                u.email.toLowerCase().includes(query)
+            );
+
+            if (currentFilter === 'Active') {
+                filtered = filtered.filter(u => u.is_active);
+            } else if (currentFilter === 'Pro') {
+                filtered = filtered.filter(u => u.is_premium);
+            } else if (currentFilter === 'Banned') {
+                filtered = filtered.filter(u => !u.is_active);
+            }
+
+            renderUsers(filtered);
+        }
+
+        let currentTargetEmail = '';
+        let currentAction = ''; // 'unlock' or 'lock'
+        let availableTests = [];
+
+        async function openAccessModal(email, action) {
+            currentTargetEmail = email;
+            currentAction = action;
+            
+            document.getElementById('target-user-email').textContent = email;
+            document.getElementById('modal-action-title').textContent = action === 'unlock' ? 'Grant Test Access' : 'Revoke Test Access';
+            document.getElementById('modal-action-desc').textContent = action === 'unlock' ? 'Select a mock test to unlock for' : 'Select a mock test to lock for';
+            document.getElementById('confirm-btn').textContent = action === 'unlock' ? 'Unlock Now' : 'Lock Now';
+            document.getElementById('confirm-btn').className = action === 'unlock' ? 'btn-primary' : 'btn-primary'; // Could use different color if needed
+            
+            if (action === 'lock') {
+                document.getElementById('confirm-btn').style.background = 'var(--accent)';
+            } else {
+                document.getElementById('confirm-btn').style.background = 'linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)';
+            }
+
+            document.getElementById('access-modal').classList.add('active');
+            
+            if (availableTests.length === 0) {
+                await loadAvailableTests();
+            }
+        }
+
+        function closeAccessModal() {
+            document.getElementById('access-modal').classList.remove('active');
+        }
+
+        async function loadAvailableTests() {
+            try {
+                const response = await Api.get('/admin/tests/list/', localStorage.getItem('accessToken'));
+                availableTests = response.tests || [];
+                const selector = document.getElementById('test-selector');
+                selector.innerHTML = '<option value="">Choose a test...</option>' + 
+                    availableTests.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+            } catch (err) {
+                console.error('Failed to load tests:', err);
+            }
+        }
+
+        async function confirmAccessAction() {
+            const testId = document.getElementById('test-selector').value;
+            if (!testId) {
+                alert('Please select a test.');
+                return;
+            }
+
+            const endpoint = currentAction === 'unlock' ? '/admin/users/unlock-test/' : '/admin/users/lock-test/';
+            const successMsg = currentAction === 'unlock' ? 'Test successfully unlocked!' : 'Test access revoked!';
+
+            try {
+                await Api.post(endpoint, {
+                    email: currentTargetEmail,
+                    test_id: parseInt(testId)
+                }, localStorage.getItem('accessToken'));
+                
+                alert(successMsg);
+                closeAccessModal();
+            } catch (err) {
+                alert('Action failed: ' + err.message);
+            }
+        }
+
+        window.onload = initUsers;
+    </script>
+</body>
+</html>

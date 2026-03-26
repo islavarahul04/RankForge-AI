@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- Semantic Colors Light -->
+    <color name="bg_main">#F8F9FE</color>
+    <color name="bg_surface">#FFFFFF</color>
+    <color name="text_primary">#101820</color>
+    <color name="text_primary_alt">#3A4D66</color>
+    <color name="text_secondary">#5A6B80</color>
+    <color name="text_hint">#8C98A4</color>
+    <color name="divider">#F0F2F5</color>
+    
+    <color name="ic_launcher_orange_background">#FF8C00</color>
+</resources>

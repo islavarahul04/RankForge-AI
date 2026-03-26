@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution Mode | RankForge AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .exam-layout {
+            display: grid;
+            grid-template-rows: 70px 1fr 80px;
+            height: 100vh;
+            background: var(--bg-deep);
+            color: var(--text-main);
+        }
+
+        .exam-header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .exam-main {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            overflow: hidden;
+        }
+
+        .question-area {
+            padding: 40px 60px;
+            overflow-y: auto;
+        }
+
+        .sidebar-pallet {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--glass-border);
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            overflow-y: auto;
+        }
+
+        .exam-footer {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .pallet-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .pallet-num {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pallet-num.active { border-color: var(--secondary); background: rgba(168, 85, 247, 0.2); }
+        .pallet-num.correct { background: var(--success); color: white !important; border: none; }
+        .pallet-num.incorrect { background: var(--accent); color: white !important; border: none; }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 28px;
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .option-item.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.1); }
+        .option-item.wrong { border-color: var(--accent); background: rgba(244, 63, 94, 0.1); }
+
+        .option-circle {
+            width: 26px;
+            height: 26px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: 800;
+        }
+
+        .option-item.correct .option-circle { background: var(--success); border-color: var(--success); color: white; }
+        .option-item.wrong .option-circle { background: var(--accent); border-color: var(--accent); color: white; }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        #q-status-text.correct { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        #q-status-text.incorrect { background: rgba(244, 63, 94, 0.1); color: var(--accent); }
+    </style>
+</head>
+<body>
+    <div class="exam-layout">
+        <header class="exam-header">
+            <h3 class="text-gradient">Solution Explorer</h3>
+            <div id="status-chip" class="status-badge" style="background: rgba(255,255,255,0.05);">Analyzing...</div>
+            <button class="btn-primary" onclick="location.href='history.html'" style="padding: 10px 24px; font-size: 0.85rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); box-shadow: none;">Exit Solution</button>
+        </header>
+
+        <main class="exam-main">
+            <div class="question-area">
+                <div id="loading" style="text-align: center; margin-top: 100px;">
+                    <p class="text-muted">Loading solution intelligence...</p>
+                </div>
+                <div id="q-container" class="hidden">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <span id="q-num" style="font-weight: 800; color: var(--secondary); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.1em;">Question 01</span>
+                        <span id="q-status-text" class="status-badge">Correct</span>
+                    </div>
+                    <h2 id="q-text" style="font-weight: 900; margin-bottom: 40px; line-height: 1.5; font-size: 1.8rem;"></h2>
+                    
+                    <div id="options">
+                        <div class="option-item" id="opt-container-0">
+                            <div class="option-circle">A</div>
+                            <span id="opt-0" style="font-size: 1.1rem;"></span>
+                        </div>
+                        <div class="option-item" id="opt-container-1">
+                            <div class="option-circle">B</div>
+                            <span id="opt-1" style="font-size: 1.1rem;"></span>
+                        </div>
+                        <div class="option-item" id="opt-container-2">
+                            <div class="option-circle">C</div>
+                            <span id="opt-2" style="font-size: 1.1rem;"></span>
+                        </div>
+                        <div class="option-item" id="opt-container-3">
+                            <div class="option-circle">D</div>
+                            <span id="opt-3" style="font-size: 1.1rem;"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="sidebar-pallet">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="font-weight: 900;" class="text-gradient">Mistake Tracker</h3>
+                    <span id="pallet-status" class="badge badge-success">0 Issues</span>
+                </div>
+                <p id="filter-text" class="text-muted" style="font-size: 0.8rem;">Filtering for incorrect questions</p>
+                
+                <div class="pallet-grid" id="pallet-grid">
+                    <!-- Numbers appear here -->
+                </div>
+                
+                <div style="margin-top: auto; padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                    <button id="filter-btn" class="btn-primary" style="width: 100%; background: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);" onclick="toggleFilter()">Show All Questions</button>
+                </div>
+            </aside>
+        </main>
+
+        <footer class="exam-footer">
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <button class="btn-primary" style="background: transparent; border: 1px solid var(--glass-border); color: #fff; box-shadow: none;" onclick="prev()">← Previous</button>
+                <button class="btn-primary" id="next-btn" style="min-width: 250px; padding: 18px 40px; font-size: 1.1rem;" onclick="next()">Next Problem →</button>
+            </div>
+            <div class="text-muted" style="font-size: 0.85rem; font-weight: 600;">Neural Solution Engine v2.0</div>
+        </footer>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/solution.js"></script>
+</body>
+</html>

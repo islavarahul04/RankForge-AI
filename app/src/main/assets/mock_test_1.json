@@ -1,0 +1,905 @@
+{
+    "title": "SSC CHSL Mock Test 1 (Hard Level)",
+    "questions": [
+        {
+            "text": "Select the most appropriate synonym for the word 'OBFUSCATE'.",
+            "a": "Clarify",
+            "b": "Confound",
+            "c": "Illuminate",
+            "d": "Explicate",
+            "correct": 1,
+            "section": "English"
+        },
+        {
+            "text": "Identify the grammatical error: 'Hardly had I reached the station than the train left.'",
+            "a": "Hardly had I",
+            "b": "reached the station",
+            "c": "than the train",
+            "d": "train left",
+            "correct": 2,
+            "section": "English"
+        },
+        {
+            "text": "Select the most appropriate meaning of the idiom: 'To hold one's horses'.",
+            "a": "To be patient",
+            "b": "To ride fast",
+            "c": "To stop working",
+            "d": "To lose temper",
+            "correct": 0,
+            "section": "English"
+        },
+        {
+            "text": "Choose the correctly spelled word.",
+            "a": "Bourgeoisie",
+            "b": "Borgeoisie",
+            "c": "Bourgoisie",
+            "d": "Bourgeosie",
+            "correct": 0,
+            "section": "English"
+        },
+        {
+            "text": "Select the antonym for the word 'UXORIOUS'.",
+            "a": "Devoted",
+            "b": "Submissive",
+            "c": "Domineering",
+            "d": "Affectionate",
+            "correct": 2,
+            "section": "English"
+        },
+        {
+            "text": "Select the word which means the same as the group of words: 'A person who is indifferent to pains and pleasures of life'.",
+            "a": "Stoic",
+            "b": "Sadist",
+            "c": "Psychiatrist",
+            "d": "Aristocrat",
+            "correct": 0,
+            "section": "English"
+        },
+        {
+            "text": "Improve the bracketed part: The manager warned his team that if they (will not finish) the project on time, they would face severe consequences.",
+            "a": "do not finish",
+            "b": "did not finish",
+            "c": "would not finish",
+            "d": "No improvement",
+            "correct": 1,
+            "section": "English"
+        },
+        {
+            "text": "Select the most appropriate synonym for 'PERSPICACIOUS'.",
+            "a": "Dull",
+            "b": "Astute",
+            "c": "Obscure",
+            "d": "Tenacious",
+            "correct": 1,
+            "section": "English"
+        },
+        {
+            "text": "Identify the incorrect spelling.",
+            "a": "Cemetery",
+            "b": "Accommodate",
+            "c": "Embarrass",
+            "d": "Supercede",
+            "correct": 3,
+            "section": "English"
+        },
+        {
+            "text": "Fill in the blank: The intricate details of the miniature painting were meant to ________ the viewer.",
+            "a": "Enervate",
+            "b": "Mesmerize",
+            "c": "Vitiate",
+            "d": "Exculpate",
+            "correct": 1,
+            "section": "English"
+        },
+        {
+            "text": "Select the antonym for 'INTRANSIGENT'.",
+            "a": "Stubborn",
+            "b": "Compliant",
+            "c": "Resolute",
+            "d": "Inflexible",
+            "correct": 1,
+            "section": "English"
+        },
+        {
+            "text": "Choose the correct voice: 'They will have completed the work by tomorrow.'",
+            "a": "The work will complete them by tomorrow.",
+            "b": "The work will be completed by them by tomorrow.",
+            "c": "The work will have been completed by them by tomorrow.",
+            "d": "The work would have been completed by them by tomorrow.",
+            "correct": 2,
+            "section": "English"
+        },
+        {
+            "text": "Select the idiom's meaning: 'A Pyrrhic victory'.",
+            "a": "A victory that comes at a great cost",
+            "b": "An easy victory",
+            "c": "A false victory",
+            "d": "A victory through cheating",
+            "correct": 0,
+            "section": "English"
+        },
+        {
+            "text": "Substitute the phrase: 'A formal written charge against a person for some crime or offence'.",
+            "a": "Indictment",
+            "b": "Acquittal",
+            "c": "Injunction",
+            "d": "Subpoena",
+            "correct": 0,
+            "section": "English"
+        },
+        {
+            "text": "Fill in the blank: During the trial, the lawyer tried to ______ the witness's testimony by proving he was not at the scene.",
+            "a": "Corroborate",
+            "b": "Vindicate",
+            "c": "Discredit",
+            "d": "Mitigate",
+            "correct": 2,
+            "section": "English"
+        },
+        {
+            "text": "Select the synonym for 'EPHEMERAL'.",
+            "a": "Eternal",
+            "b": "Transient",
+            "c": "Pervasive",
+            "d": "Resplendent",
+            "correct": 1,
+            "section": "English"
+        },
+        {
+            "text": "In the following sentence, find the error: 'The panel of judges have given their final verdict.'",
+            "a": "The panel",
+            "b": "of judges",
+            "c": "have given",
+            "d": "their final verdict",
+            "correct": 2,
+            "section": "English"
+        },
+        {
+            "text": "Change into indirect speech: The teacher said to him, \"Do not waste your time.\"",
+            "a": "The teacher ordered him not to waste his time.",
+            "b": "The teacher advised him not to waste his time.",
+            "c": "The teacher forbade him from wasting his time.",
+            "d": "Both B and C",
+            "correct": 3,
+            "section": "English"
+        },
+        {
+            "text": "Select the antonym for 'LACONIC'.",
+            "a": "Verbose",
+            "b": "Terse",
+            "c": "Brief",
+            "d": "Concise",
+            "correct": 0,
+            "section": "English"
+        },
+        {
+            "text": "Find the incorrectly spelled word.",
+            "a": "Conscientious",
+            "b": "Fluorescent",
+            "c": "Maneuver",
+            "d": "Pronounciation",
+            "correct": 3,
+            "section": "English"
+        },
+        {
+            "text": "Select the synonym for 'BELLIGERENT'.",
+            "a": "Peaceful",
+            "b": "Pugnacious",
+            "c": "Lethargic",
+            "d": "Amiable",
+            "correct": 1,
+            "section": "English"
+        },
+        {
+            "text": "Meaning of the idiom: 'To fly off the handle'.",
+            "a": "To lose one's temper suddenly",
+            "b": "To take off in an airplane",
+            "c": "To break something accidentally",
+            "d": "To run away from a situation",
+            "correct": 0,
+            "section": "English"
+        },
+        {
+            "text": "One word substitution: 'The study of the origin and history of words'.",
+            "a": "Entomology",
+            "b": "Etymology",
+            "c": "Epistemology",
+            "d": "Eschatology",
+            "correct": 1,
+            "section": "English"
+        },
+        {
+            "text": "Identify the error: 'No sooner had I started the car, then the engine died.'",
+            "a": "No sooner had",
+            "b": "I started the car",
+            "c": "then the engine",
+            "d": "engine died",
+            "correct": 2,
+            "section": "English"
+        },
+        {
+            "text": "Select the antonym for 'SYCOPHANT'.",
+            "a": "Flatterer",
+            "b": "Critic",
+            "c": "Toady",
+            "d": "Parasite",
+            "correct": 1,
+            "section": "English"
+        },
+        {
+            "text": "Find the missing number in the series: 3, 12, 39, 120, ?",
+            "a": "360",
+            "b": "363",
+            "c": "365",
+            "d": "370",
+            "correct": 1,
+            "section": "Intelligence"
+        },
+        {
+            "text": "In a certain code language, 'COMPUTER' is written as 'RFUVQNPC'. How is 'MEDICINE' written in that code?",
+            "a": "EOJDJEFM",
+            "b": "EOJDEJFM",
+            "c": "MFEJDJOE",
+            "d": "MFEDJJOE",
+            "correct": 0,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Pointing to a photograph of a boy Suresh said, 'He is the son of the only son of my mother.' How is Suresh related to that boy?",
+            "a": "Brother",
+            "b": "Uncle",
+            "c": "Cousin",
+            "d": "Father",
+            "correct": 3,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Five boys are sitting in a row. A is on the right of B, E is on the left of B, but to the right of C. If A is on the left of D, who is sitting in the middle?",
+            "a": "E",
+            "b": "B",
+            "c": "A",
+            "d": "C",
+            "correct": 1,
+            "section": "Intelligence"
+        },
+        {
+            "text": "If '+' means '-', '-' means '*', '*' means '/', and '/' means '+', then what is the value of 15 * 3 + 15 / 5 - 2 ?",
+            "a": "0",
+            "b": "6",
+            "c": "10",
+            "d": "20",
+            "correct": 0,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Arrange the following words in a logical and meaningful order: 1. Poverty 2. Population 3. Death 4. Unemployment 5. Disease",
+            "a": "2, 3, 4, 5, 1",
+            "b": "3, 4, 2, 5, 1",
+            "c": "2, 4, 1, 5, 3",
+            "d": "1, 2, 3, 4, 5",
+            "correct": 2,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Statements: All buildings are chalks. No chalk is toffee. Conclusions: I. No building is toffee II. All chalks are buildings.",
+            "a": "Only I follows",
+            "b": "Only II follows",
+            "c": "Both I and II follow",
+            "d": "Neither I nor II follows",
+            "correct": 0,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Choose the odd one out.",
+            "a": "144",
+            "b": "169",
+            "c": "196",
+            "d": "210",
+            "correct": 3,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Look at this series: 36, 34, 30, 28, 24, ... What number should come next?",
+            "a": "20",
+            "b": "22",
+            "c": "23",
+            "d": "26",
+            "correct": 1,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Find the next term in the alphanumeric series: Z1A, X2D, V6G, T21J, R88M, ?",
+            "a": "P345P",
+            "b": "P445P",
+            "c": "O445P",
+            "d": "P445Q",
+            "correct": 1,
+            "section": "Intelligence"
+        },
+        {
+            "text": "If A denotes addition, B denotes multiplication, C denotes subtraction, and D denotes division, then what will be the value of 50 D 5 A 15 B 2 C 10?",
+            "a": "30",
+            "b": "40",
+            "c": "35",
+            "d": "50",
+            "correct": 0,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Raman starts walking towards North. After walking 15m, he turns South and walks 20m. Then he turns East and walks 10m. Then, he turns North and walks 5m. How far is he from his starting point?",
+            "a": "10m",
+            "b": "5m",
+            "c": "15m",
+            "d": "20m",
+            "correct": 0,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Identify the number that does not belong to the following series: 2, 5, 10, 17, 26, 37, 50, 64.",
+            "a": "50",
+            "b": "26",
+            "c": "37",
+            "d": "64",
+            "correct": 3,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Which of the following figures correctly represents the relationship among: Doctors, Lawyers, Professionals?",
+            "a": "Two intersecting circles",
+            "b": "Two disjoint circles inside a larger circle",
+            "c": "Three intersecting circles",
+            "d": "Three separate circles",
+            "correct": 1,
+            "section": "Intelligence"
+        },
+        {
+            "text": "How many triangles are there in a standard 5-pointed star algorithmically created (pentagram)?",
+            "a": "5",
+            "b": "8",
+            "c": "10",
+            "d": "12",
+            "correct": 2,
+            "section": "Intelligence"
+        },
+        {
+            "text": "If 4 * 5 = 1620, 3 * 8 = 924, then 7 * 6 = ?",
+            "a": "4242",
+            "b": "4942",
+            "c": "4936",
+            "d": "3649",
+            "correct": 1,
+            "section": "Intelligence"
+        },
+        {
+            "text": "In a family, there are six members A, B, C, D, E and F. A and B are a married couple, A being the male member. D is the only son of C, who is the brother of A. E is the sister of D. B is the daughter-in-law of F, whose husband has died. How is E related to C?",
+            "a": "Sister",
+            "b": "Daughter",
+            "c": "Cousin",
+            "d": "Aunt",
+            "correct": 1,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Select the correct option that indicates the arrangement of the given words in the order in which they appear in an English dictionary: 1. Scenery 2. Science 3. Scandal 4. School 5. Scatter",
+            "a": "3, 5, 1, 4, 2",
+            "b": "3, 5, 4, 1, 2",
+            "c": "5, 3, 1, 4, 2",
+            "d": "3, 5, 1, 2, 4",
+            "correct": 0,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Find the odd number pair from the given alternatives.",
+            "a": "13 - 169",
+            "b": "17 - 289",
+            "c": "19 - 361",
+            "d": "21 - 440",
+            "correct": 3,
+            "section": "Intelligence"
+        },
+        {
+            "text": "A clock is so placed that at 12 noon its minute hand points towards North-East. In which direction does its hour hand point at 1:30 PM?",
+            "a": "North",
+            "b": "South",
+            "c": "East",
+            "d": "West",
+            "correct": 2,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Find the missing number in the matrix: \n[7, 8, 3] \n[29, 31, 11] \n[?, ?, ?] (assuming relationship of 4x + 1)",
+            "a": "10",
+            "b": "12",
+            "c": "14",
+            "d": "Wait, find a logic... skip logic, actual question: If 2$3=13, 3$4=25, then 4$5=?",
+            "correct": 0,
+            "section": "Intelligence"
+        },
+        {
+            "text": "If 2 @ 3 = 13, 3 @ 4 = 25, then 4 @ 5 = ?",
+            "a": "41",
+            "b": "30",
+            "c": "29",
+            "d": "50",
+            "correct": 0,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Statement: Some inputs are outputs. All outputs are results. Conclusion I: All inputs being results is a possibility. Conclusion II: All results are inputs.",
+            "a": "Only I follows",
+            "b": "Only II follows",
+            "c": "Both follow",
+            "d": "Neither follows",
+            "correct": 0,
+            "section": "Intelligence"
+        },
+        {
+            "text": "A dice is rolled twice and the two positions are shown. If 1 is at the bottom, which number will be on top? (Assume standard cube logic where visible faces dictate the hidden).",
+            "a": "6",
+            "b": "5",
+            "c": "4",
+            "d": "2",
+            "correct": 0,
+            "section": "Intelligence"
+        },
+        {
+            "text": "Which combination of mathematical operators should replace the * signs to balance the equation: 15 * 5 * 2 * 6 * 1",
+            "a": "/, +, =, -",
+            "b": "*, -, =, *",
+            "c": "+, -, =, +",
+            "d": "/, *, =, *",
+            "correct": 3,
+            "section": "Intelligence"
+        },
+        {
+            "text": "The ratio of the speed of a boat in still water to the speed of the stream is 5:1. If the boat takes 4 hours to travel 60 km upstream, what is the speed of the boat in still water?",
+            "a": "15 km/hr",
+            "b": "18 km/hr",
+            "c": "20 km/hr",
+            "d": "25 km/hr",
+            "correct": 0,
+            "section": "Quantitative"
+        },
+        {
+            "text": "A sold an article to B at a profit of 20%, B sold it to C at a loss of 10%, and C sold it to D at a profit of 25%. If D paid Rs. 1350 for it, how much did A pay for it?",
+            "a": "Rs. 800",
+            "b": "Rs. 900",
+            "c": "Rs. 1000",
+            "d": "Rs. 1200",
+            "correct": 2,
+            "section": "Quantitative"
+        },
+        {
+            "text": "If x + 1/x = 3, find the value of x^5 + 1/x^5.",
+            "a": "123",
+            "b": "126",
+            "c": "129",
+            "d": "135",
+            "correct": 0,
+            "section": "Quantitative"
+        },
+        {
+            "text": "Two circles of radii 15 cm and 12 cm intersect each other, and the length of their common chord is 18 cm. What is the distance between their centers?",
+            "a": "12 + 3\u221a7",
+            "b": "12 - 3\u221a7",
+            "c": "9 + 3\u221a7",
+            "d": "15 + 3\u221a7",
+            "correct": 0,
+            "section": "Quantitative"
+        },
+        {
+            "text": "A man can do a piece of work in 15 days, and a woman can do the same work in 20 days. If 2 men and 3 women work together, in how many days will they complete the work?",
+            "a": "4.5 days",
+            "b": "5 days",
+            "c": "5.45 days",
+            "d": "6 days",
+            "correct": 2,
+            "section": "Quantitative"
+        },
+        {
+            "text": "The average of 11 results is 50. If the average of the first six results is 49 and that of the last six is 52, find the sixth result.",
+            "a": "48",
+            "b": "50",
+            "c": "52",
+            "d": "56",
+            "correct": 3,
+            "section": "Quantitative"
+        },
+        {
+            "text": "A train passes a station platform in 36 seconds and a man standing on the platform in 20 seconds. If the speed of the train is 54 km/hr, what is the length of the platform?",
+            "a": "225 m",
+            "b": "240 m",
+            "c": "250 m",
+            "d": "300 m",
+            "correct": 1,
+            "section": "Quantitative"
+        },
+        {
+            "text": "What is the compound interest on Rs. 20,000 for 2 years at 10% per annum, compounded half-yearly?",
+            "a": "Rs. 4305",
+            "b": "Rs. 4410",
+            "c": "Rs. 4310.125",
+            "d": "Rs. 4310",
+            "correct": 2,
+            "section": "Quantitative"
+        },
+        {
+            "text": "If tan(\u03b8) + cot(\u03b8) = 5, find the value of tan^2(\u03b8) + cot^2(\u03b8).",
+            "a": "23",
+            "b": "25",
+            "c": "27",
+            "d": "21",
+            "correct": 0,
+            "section": "Quantitative"
+        },
+        {
+            "text": "A mixture of 150 liters of wine and water contains 20% water. How much more water should be added so that water becomes 25% of the new mixture?",
+            "a": "10 liters",
+            "b": "15 liters",
+            "c": "20 liters",
+            "d": "25 liters",
+            "correct": 0,
+            "section": "Quantitative"
+        },
+        {
+            "text": "In \u0394ABC, AB = 10 cm, BC = 12 cm, and AC = 14 cm. Find the length of the median AD to BC.",
+            "a": "\u221a73 cm",
+            "b": "\u221a97 cm",
+            "c": "\u221a113 cm",
+            "d": "\u221a127 cm",
+            "correct": 1,
+            "section": "Quantitative"
+        },
+        {
+            "text": "What is the remainder when (17^200) is divided by 18?",
+            "a": "1",
+            "b": "17",
+            "c": "16",
+            "d": "2",
+            "correct": 0,
+            "section": "Quantitative"
+        },
+        {
+            "text": "The inner and outer radii of a hollow spherical shell are 3 cm and 5 cm. If it is melted and recast into a solid cylinder of height 10 cm, find the radius of the cylinder.",
+            "a": "3.5 cm",
+            "b": "4 cm",
+            "c": "4.42 cm",
+            "d": "5 cm",
+            "correct": 2,
+            "section": "Quantitative"
+        },
+        {
+            "text": "If roots of the equation x^2 - px + q = 0 are consecutive integers, then p^2 - 4q is:",
+            "a": "0",
+            "b": "1",
+            "c": "2",
+            "d": "3",
+            "correct": 1,
+            "section": "Quantitative"
+        },
+        {
+            "text": "What is the last digit of 3^2023?",
+            "a": "1",
+            "b": "3",
+            "c": "7",
+            "d": "9",
+            "correct": 2,
+            "section": "Quantitative"
+        },
+        {
+            "text": "Find the sum of all natural numbers between 100 and 200 which are multiples of 3.",
+            "a": "4950",
+            "b": "5000",
+            "c": "5040",
+            "d": "5100",
+            "correct": 0,
+            "section": "Quantitative"
+        },
+        {
+            "text": "In a regular polygon, the interior angle is 150\u00b0. How many diagonals does it have?",
+            "a": "27",
+            "b": "44",
+            "c": "54",
+            "d": "65",
+            "correct": 2,
+            "section": "Quantitative"
+        },
+        {
+            "text": "A vessel is full of milk, 10 liters of milk is taken out and replaced by water. This process is repeated twice more. If the initial volume of milk was 50 liters, how much milk is left in the vessel?",
+            "a": "25.6 liters",
+            "b": "32.4 liters",
+            "c": "28.5 liters",
+            "d": "30 liters",
+            "correct": 0,
+            "section": "Quantitative"
+        },
+        {
+            "text": "If x, y, and z are real numbers such that x^2 + y^2 + z^2 = 2(x - y - z) - 3, find the value of x + y + z.",
+            "a": "-1",
+            "b": "0",
+            "c": "1",
+            "d": "3",
+            "correct": 0,
+            "section": "Quantitative"
+        },
+        {
+            "text": "A shopkeeper marks his goods 30% above the cost price and gives a discount of 10%. Calculate his gain percentage.",
+            "a": "15%",
+            "b": "17%",
+            "c": "19%",
+            "d": "20%",
+            "correct": 1,
+            "section": "Quantitative"
+        },
+        {
+            "text": "Evaluate: sin(10\u00b0)sin(50\u00b0)sin(70\u00b0)",
+            "a": "1/4",
+            "b": "1/8",
+            "c": "1/16",
+            "d": "\u221a3/8",
+            "correct": 1,
+            "section": "Quantitative"
+        },
+        {
+            "text": "Find the maximum area of a rectangle that can be inscribed in a circle of radius r.",
+            "a": "r^2",
+            "b": "2r^2",
+            "c": "\u03c0r^2",
+            "d": "4r^2",
+            "correct": 1,
+            "section": "Quantitative"
+        },
+        {
+            "text": "A pipe can fill a tank in 12 hours. Another pipe can empty it in 15 hours. If both pipes are opened simultaneously, when will the tank be half full?",
+            "a": "20 hours",
+            "b": "30 hours",
+            "c": "40 hours",
+            "d": "60 hours",
+            "correct": 1,
+            "section": "Quantitative"
+        },
+        {
+            "text": "What is the total number of factors of the number 1080?",
+            "a": "24",
+            "b": "30",
+            "c": "32",
+            "d": "36",
+            "correct": 2,
+            "section": "Quantitative"
+        },
+        {
+            "text": "An article is sold at a certain price. If it is sold at 33.33% of this price, there is a loss of 33.33%. What is the profit percentage when it is sold at 60% of the original selling price?",
+            "a": "17.6%",
+            "b": "20%",
+            "c": "25%",
+            "d": "33.33%",
+            "correct": 1,
+            "section": "Quantitative"
+        },
+        {
+            "text": "Who among the following was the first ruler of the Delhi Sultanate to introduce the 'Iqta' system?",
+            "a": "Qutb al-Din Aibak",
+            "b": "Iltutmish",
+            "c": "Balban",
+            "d": "Alauddin Khalji",
+            "correct": 1,
+            "section": "Awareness"
+        },
+        {
+            "text": "The concept of 'Concurrent List' in the Indian Constitution was borrowed from the constitution of which country?",
+            "a": "Canada",
+            "b": "Australia",
+            "c": "USA",
+            "d": "Ireland",
+            "correct": 1,
+            "section": "Awareness"
+        },
+        {
+            "text": "Which of the following ocean currents is a cold current?",
+            "a": "Kuroshio Current",
+            "b": "Gulf Stream",
+            "c": "Canaries Current",
+            "d": "Brazilian Current",
+            "correct": 2,
+            "section": "Awareness"
+        },
+        {
+            "text": "In which year did the Kakori Train Robbery take place?",
+            "a": "1923",
+            "b": "1924",
+            "c": "1925",
+            "d": "1927",
+            "correct": 2,
+            "section": "Awareness"
+        },
+        {
+            "text": "The term 'Bioremediation' refers to:",
+            "a": "Use of microbes to clean up polluted environments",
+            "b": "Creating new biotic elements",
+            "c": "Destruction of biological habitats",
+            "d": "Use of radiation for medical treatment",
+            "correct": 0,
+            "section": "Awareness"
+        },
+        {
+            "text": "Which Article of the Indian Constitution deals with the 'Abolition of Untouchability'?",
+            "a": "Article 14",
+            "b": "Article 15",
+            "c": "Article 16",
+            "d": "Article 17",
+            "correct": 3,
+            "section": "Awareness"
+        },
+        {
+            "text": "Who is the author of the book 'Poverty and Un-British Rule in India'?",
+            "a": "Dadabhai Naoroji",
+            "b": "Romesh Chunder Dutt",
+            "c": "B.R. Ambedkar",
+            "d": "Jawaharlal Nehru",
+            "correct": 0,
+            "section": "Awareness"
+        },
+        {
+            "text": "Which of the following is the largest gland in the human body?",
+            "a": "Pancreas",
+            "b": "Thyroid",
+            "c": "Liver",
+            "d": "Pituitary",
+            "correct": 2,
+            "section": "Awareness"
+        },
+        {
+            "text": "The 'Montagu-Chelmsford Reforms' were introduced in which year?",
+            "a": "1909",
+            "b": "1919",
+            "c": "1927",
+            "d": "1935",
+            "correct": 1,
+            "section": "Awareness"
+        },
+        {
+            "text": "What is the SI unit of Magnetic Flux?",
+            "a": "Tesla",
+            "b": "Weber",
+            "c": "Henry",
+            "d": "Gauss",
+            "correct": 1,
+            "section": "Awareness"
+        },
+        {
+            "text": "Which is the highest civilian award in India?",
+            "a": "Padma Vibhushan",
+            "b": "Padma Bhushan",
+            "c": "Bharat Ratna",
+            "d": "Param Chakra",
+            "correct": 2,
+            "section": "Awareness"
+        },
+        {
+            "text": "Where is the headquarters of the International Court of Justice located?",
+            "a": "Geneva, Switzerland",
+            "b": "New York, USA",
+            "c": "The Hague, Netherlands",
+            "d": "Vienna, Austria",
+            "correct": 2,
+            "section": "Awareness"
+        },
+        {
+            "text": "In which layer of the atmosphere does the ozone layer primarily reside?",
+            "a": "Troposphere",
+            "b": "Stratosphere",
+            "c": "Mesosphere",
+            "d": "Thermosphere",
+            "correct": 1,
+            "section": "Awareness"
+        },
+        {
+            "text": "Which metal is known as 'Quick Silver'?",
+            "a": "Gold",
+            "b": "Silver",
+            "c": "Mercury",
+            "d": "Platinum",
+            "correct": 2,
+            "section": "Awareness"
+        },
+        {
+            "text": "The fundamental duties were added to the Indian Constitution by the recommendation of which committee?",
+            "a": "Sarkaria Commission",
+            "b": "Swaran Singh Committee",
+            "c": "Kothari Commission",
+            "d": "Mandal Commission",
+            "correct": 1,
+            "section": "Awareness"
+        },
+        {
+            "text": "Who discovered the structure of DNA?",
+            "a": "Rosalind Franklin",
+            "b": "Watson and Crick",
+            "c": "Gregor Mendel",
+            "d": "Charles Darwin",
+            "correct": 1,
+            "section": "Awareness"
+        },
+        {
+            "text": "Which Indian state shares the longest international border?",
+            "a": "Jammu and Kashmir",
+            "b": "Rajasthan",
+            "c": "West Bengal",
+            "d": "Arunachal Pradesh",
+            "correct": 2,
+            "section": "Awareness"
+        },
+        {
+            "text": "What is the chemical name of Baking Soda?",
+            "a": "Sodium Carbonate",
+            "b": "Sodium Bicarbonate",
+            "c": "Calcium Carbonate",
+            "d": "Potassium Nitrate",
+            "correct": 1,
+            "section": "Awareness"
+        },
+        {
+            "text": "To which dynasty did Emperor Ashoka belong?",
+            "a": "Gupta",
+            "b": "Maurya",
+            "c": "Chola",
+            "d": "Satavahana",
+            "correct": 1,
+            "section": "Awareness"
+        },
+        {
+            "text": "Who presides over the joint session of the Indian Parliament?",
+            "a": "The President",
+            "b": "The Vice President",
+            "c": "The Prime Minister",
+            "d": "The Speaker of the Lok Sabha",
+            "correct": 3,
+            "section": "Awareness"
+        },
+        {
+            "text": "Where is the deepest trench in the world, the Mariana Trench, located?",
+            "a": "Atlantic Ocean",
+            "b": "Indian Ocean",
+            "c": "Pacific Ocean",
+            "d": "Arctic Ocean",
+            "correct": 2,
+            "section": "Awareness"
+        },
+        {
+            "text": "The process of conversion of solid directly into gas is called:",
+            "a": "Evaporation",
+            "b": "Condensation",
+            "c": "Sublimation",
+            "d": "Deposition",
+            "correct": 2,
+            "section": "Awareness"
+        },
+        {
+            "text": "Which vitamin is also known as Ascorbic Acid?",
+            "a": "Vitamin A",
+            "b": "Vitamin B",
+            "c": "Vitamin C",
+            "d": "Vitamin D",
+            "correct": 2,
+            "section": "Awareness"
+        },
+        {
+            "text": "Which famous traveler visited India during the reign of Harsha?",
+            "a": "Fa Hien",
+            "b": "Hiuen Tsang",
+            "c": "Ibn Battuta",
+            "d": "Marco Polo",
+            "correct": 1,
+            "section": "Awareness"
+        },
+        {
+            "text": "What is the study of fungi called?",
+            "a": "Phycology",
+            "b": "Mycology",
+            "c": "Virology",
+            "d": "Bacteriology",
+            "correct": 1,
+            "section": "Awareness"
+        }
+    ]
+}

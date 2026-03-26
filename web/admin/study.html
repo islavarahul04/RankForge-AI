@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Management | RankForge Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .main-content { margin-left: 300px; padding: 60px; }
+        .study-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+        .exam-card {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .exam-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.05); }
+        .exam-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255,255,255,0.1);
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--secondary); }
+        input:checked + .slider:before { transform: translateX(26px); }
+    </style>
+</head>
+<body class="midnight-aurora">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 48px;">RankForge Admin</div>
+            <nav style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <a href="dashboard.html" class="nav-item"><span>🏠</span> Overview</a>
+                <a href="users.html" class="nav-item"><span>👥</span> User Management</a>
+                <a href="tests-manage.html" class="nav-item"><span>📝</span> Mock Tests</a>
+                <a href="resolutions.html" class="nav-item"><span>🎟️</span> Support Tickets</a>
+                <a href="subscriptions.html" class="nav-item"><span>💳</span> Subscription Plans</a>
+                <a href="study.html" class="nav-item active"><span>📚</span> Study Content</a>
+            </nav>
+
+            <div class="user-profile" style="margin-top: 32px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="width: 44px; height: 44px; background: var(--secondary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white;">A</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <p id="admin-sidebar-name" style="margin: 0; color: white; font-weight: 700; font-size: 0.85rem; white-space: nowrap; text-overflow: ellipsis;">Admin</p>
+                    <button onclick="Auth.logout()" style="background: none; border: none; padding: 0; color: var(--accent); font-size: 0.75rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-top: 4px;">
+                        <span>🚪</span> Log out
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 class="text-gradient" style="font-size: 2.5rem; display: flex; align-items: center; gap: 16px;">
+                        Study Management
+                        <span style="font-size: 0.7rem; background: #4CAF50; color: white; padding: 4px 12px; border-radius: 100px; letter-spacing: 0.1em; font-weight: 900; vertical-align: middle;">LIVE</span>
+                    </h1>
+                    <p class="text-muted">Manage exams, subjects, and study concepts.</p>
+                </div>
+            </header>
+
+            <div id="exams-container" class="study-grid">
+                <!-- Exams will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/api.js?v=2.2"></script>
+    <script src="../js/auth.js?v=2.2"></script>
+    <script>
+        const user = Auth.getUser();
+        if (!Auth.isAuthenticated() || !user.is_staff) window.location.href = '../index.html';
+
+        async function loadExams() {
+            try {
+                const exams = await Api.get('/admin/study/exams/', localStorage.getItem('accessToken'));
+                const container = document.getElementById('exams-container');
+                
+                container.innerHTML = exams.map(exam => `
+                    <div class="glass exam-card" onclick="if(event.target.tagName !== 'INPUT' && event.target.className !== 'slider') window.location.href='study-subjects.html?id=${exam.id}&name=${encodeURIComponent(exam.name)}'">
+                        <div class="exam-icon">🎓</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0; color: white; font-size: 1.1rem;">${exam.name}</h3>
+                            <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-muted);">Manage subjects</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" ${!exam.is_locked ? 'checked' : ''} onchange="toggleLock(${exam.id}, this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                            <span style="font-size: 0.7rem; font-weight: 700; color: ${!exam.is_locked ? 'var(--secondary)' : '#F44336'}">
+                                ${!exam.is_locked ? 'UNLOCKED' : 'LOCKED'}
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Failed to load exams:', err);
+            }
+        }
+
+        async function toggleLock(id, isUnlocked) {
+            try {
+                await Api.patch(`/admin/study/exams/${id}/`, { is_locked: !isUnlocked }, localStorage.getItem('accessToken'));
+                loadExams(); // Refresh to show correct status
+            } catch (err) {
+                alert('Failed to update status');
+                loadExams();
+            }
+        }
+
+        window.onload = loadExams;
+    </script>
+</body>
+</html>

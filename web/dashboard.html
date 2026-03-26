@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<!-- FINAL_VERIFICATION_MARKER -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- CACHE_BUSTER: 1773391700 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .main-content { margin-left: 300px; padding: 60px; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            padding: 40px;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .stat-card:hover { transform: translateY(-8px); border-color: var(--primary); }
+
+        .stat-value { 
+            font-size: 3rem; 
+            font-weight: 900; 
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 64px;
+            margin-bottom: 32px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.3s ease;
+        }
+
+        .activity-item:hover { background: rgba(255,255,255,0.02); }
+        .activity-item:last-child { border-bottom: none; }
+
+        .avatar-small {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-profile {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 64px;">RankForge AI</div>
+            
+            <a href="dashboard.html" class="nav-item active">Dashboard</a>
+            <a href="mock-tests.html" class="nav-item">Mock Tests</a>
+            <a href="history.html" class="nav-item">Test History</a>
+            <a href="profile.html" class="nav-item">My Profile</a>
+            <a href="tickets.html" class="nav-item">Support</a>
+            <a href="study-zone.html" class="nav-item">Study Zone</a>
+            <a href="chat.html" class="nav-item">AI Tutor</a>
+            
+            <div class="user-profile">
+                <div class="sidebar-avatar" id="sidebar-avatar">?</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <button id="sidebar-name" style="background: none; border: none; color: white; font-weight: 700; width: 100%; text-align: left; cursor: pointer; padding: 0;">Loading...</button>
+                    <div class="text-muted" style="font-size: 0.75rem;" id="sidebar-membership">Premium Member</div>
+                </div>
+                <button onclick="Auth.logout()" style="background: none; border: none; cursor: pointer; color: white; opacity: 0.5; font-size: 1.2rem;">🚪</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2>Welcome back, <span id="user_greeting_name">Soldier</span>! <span style="font-size: 0.8rem; vertical-align: middle; color: var(--secondary);">PROTOCOL v2.3</span></h2>
+                    <p class="text-muted">Here's your progress for today. (Live Sync Active)</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div class="glass" style="padding: 10px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="location.href='streak.html'">
+                        <span style="font-weight: 700;">Streak: <span id="user-streak" style="color: var(--secondary);">0</span> Days</span>
+                    </div>
+                    <div class="glass" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;" onclick="location.href='notifications.html'">
+                        <span>🔔</span>
+                        <div id="notif-badge" style="position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; background: var(--secondary); border-radius: 50%; opacity: 0;"></div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="stats-grid">
+                <div class="glass stat-card animate-fade-in" style="animation-delay: 0.1s;">
+                    <span class="stat-label">Tests Attempted</span>
+                    <span class="stat-value text-gradient" id="stat-tests">0</span>
+                </div>
+                <div class="glass stat-card animate-fade-in" style="animation-delay: 0.2s;">
+                    <span class="stat-label">Average Accuracy</span>
+                    <span class="stat-value text-gradient" id="stat-accuracy" style="--primary: #10B981; --secondary: #34D399;">0%</span>
+                </div>
+                <div class="glass stat-card animate-fade-in" style="animation-delay: 0.3s;">
+                    <span class="stat-label">Global Rank</span>
+                    <span class="stat-value text-gradient" id="stat-rank" style="--primary: #F43F5E; --secondary: #FB7185;">#--</span>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h3>PYQ Intelligence</h3>
+                <p class="text-muted" style="font-weight: 700;">Previous Year Question Papers</p>
+            </div>
+
+            <div class="glass animate-fade-in" style="animation-delay: 0.4s; border-radius: 28px; padding: 20px;" id="pyq-container">
+                <p class="text-muted" style="text-align: center; padding: 60px;">Scanning for historical records...</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Protective route check
+        if (!Auth.isAuthenticated()) {
+            window.location.href = 'index.html';
+        }
+
+        async function initDashboard() {
+            const user = Auth.getUser();
+            if (!user) return;
+
+            // Proactive Admin Redirect
+            if (user.is_staff || user.is_admin || user.is_superuser) {
+                console.log('Administrative entity detected in user sector. Redirecting to Control Center...');
+                window.location.href = 'admin/dashboard.html';
+                return;
+            }
+            Auth.updateUserUI(user);
+            
+            // Fetch real stats from profile and streak endpoints
+            try {
+                // Fetch Profile Data
+                const refreshedUser = await Api.get('/profile/', localStorage.getItem('accessToken'));
+                localStorage.setItem('user', JSON.stringify(refreshedUser));
+                
+                Auth.updateUserUI(refreshedUser);
+                
+                document.getElementById('stat-tests').textContent = refreshedUser.tests_attempted || 0;
+                document.getElementById('stat-accuracy').textContent = (refreshedUser.average_accuracy || 0) + '%';
+
+                // Fetch Streak Data
+                const streakData = await Api.get('/streak/', localStorage.getItem('accessToken'));
+                document.getElementById('user-streak').textContent = streakData.current_streak || 0;
+
+                // Fetch recent tests removed - now fetching PYQs
+                loadPYQs();
+            } catch (err) {
+                console.error('Failed to sync dashboard telemetry:', err);
+            }
+        }
+
+        async function loadPYQs() {
+            console.log('Dashboard: Loading PYQs...');
+            const container = document.getElementById('pyq-container');
+            const token = localStorage.getItem('accessToken');
+            try {
+                const papers = await Api.get('/pyq-papers/', token);
+                console.log('Dashboard: PYQ Papers received =', papers);
+                if (papers && papers.length > 0) {
+                    container.innerHTML = `
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                            ${papers.slice(0, 6).map(p => `
+                                <div class="glass" style="padding: 20px; border-radius: 16px; transition: all 0.3s ease; cursor: pointer; border: 1px solid rgba(255,255,255,0.05);" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'" onclick="window.open('${p.file}', '_blank')">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                        <div style="width: 40px; height: 40px; background: rgba(38, 52, 139, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">📄</div>
+                                        <div style="font-weight: 800; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.title}</div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span class="text-muted" style="font-size: 0.75rem;">${p.exam_type || 'SSC'}</span>
+                                        <span class="badge badge-success" style="font-size: 0.65rem;">PDF</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    if (papers.length > 6) {
+                        const moreBtn = document.createElement('button');
+                        moreBtn.className = 'btn-primary';
+                        moreBtn.style = 'margin-top: 20px; width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.1);';
+                        moreBtn.textContent = 'Explore All Archives';
+                        moreBtn.onclick = () => alert('Full PYQ archive expanding soon!');
+                        container.appendChild(moreBtn);
+                    }
+                } else {
+                    container.innerHTML = '<p class="text-muted" style="text-align: center; padding: 60px;">No historical records found in this sector.</p>';
+                }
+            } catch (err) {
+                container.innerHTML = `<p style="color:var(--accent); text-align: center; padding: 60px;">Link Failure: ${err.message}</p>`;
+            }
+        }
+
+        window.onload = initDashboard;
+    </script>
+</body>
+</html>

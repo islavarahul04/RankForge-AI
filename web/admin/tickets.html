@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolution Command | RankForge Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --admin-bg: #26348B;
+            --admin-card: rgba(255, 255, 255, 0.05);
+            --admin-glass: rgba(255, 255, 255, 0.1);
+            --admin-orange: #FF8C00;
+            --admin-text: #FFFFFF;
+            --admin-muted: #D0D5FF;
+        }
+
+        body {
+            background: var(--admin-bg);
+            color: var(--admin-text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .tickets-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 48px;
+        }
+
+        .btn-back-circle {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .ticket-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ticket-card {
+            background: var(--admin-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ticket-card:hover { 
+            border-color: var(--admin-orange);
+            background: rgba(255,255,255,0.08);
+        }
+
+        .ticket-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar-placeholder {
+            width: 48px;
+            height: 48px;
+            background: var(--admin-glass);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: var(--admin-orange);
+        }
+
+        .status-pill {
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-pending { background: rgba(255, 140, 0, 0.15); color: var(--admin-orange); border: 1px solid rgba(255, 140, 0, 0.3); }
+        .status-resolved { background: rgba(76, 175, 80, 0.15); color: #4CAF50; border: 1px solid rgba(76, 175, 80, 0.3); }
+
+        .ticket-message {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--admin-muted);
+            background: rgba(255,255,255,0.02);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .admin-response {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .response-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--admin-orange);
+            text-transform: uppercase;
+        }
+
+        .response-text {
+            font-size: 0.95rem;
+            color: #FFFFFF;
+            font-style: italic;
+        }
+
+        .btn-reply {
+            align-self: flex-end;
+            background: var(--admin-orange);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 100px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(255, 140, 0, 0.2);
+        }
+
+        .btn-reply:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(255, 140, 0, 0.3); }
+
+        /* Reply Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .modal-card {
+            background: #1A237E;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 32px;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+        }
+
+        .modal-textarea {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 24px;
+            color: white;
+            font-size: 1rem;
+            min-height: 200px;
+            resize: none;
+            transition: all 0.3s;
+        }
+
+        .modal-textarea:focus { outline: none; border-color: var(--admin-orange); background: rgba(255,255,255,0.08); }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+
+        .btn-ghost { background: none; border: none; color: var(--admin-muted); font-weight: 700; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="tickets-container">
+        <div class="header-section animate-fade-in">
+            <button class="btn-back-circle" onclick="location.href='dashboard.html'">
+                <span style="font-size: 1.2rem;">⬅️</span>
+            </button>
+            <div>
+                <h2 style="margin: 0; font-size: 1.8rem; font-weight: 900;">Resolution Center</h2>
+                <p style="margin: 0; color: var(--admin-muted); font-size: 0.9rem;">Official support interaction and mission-ready ticket orchestration.</p>
+            </div>
+        </div>
+
+        <div id="tickets-loading" style="text-align: center; padding: 100px;">
+            <p>Scanning support network...</p>
+        </div>
+
+        <div class="ticket-list animate-fade-in" id="ticket-queue">
+            <!-- Dynamic Ticket Cards -->
+        </div>
+    </div>
+
+    <!-- Reply Modal -->
+    <div class="modal-overlay" id="reply-modal">
+        <div class="modal-card">
+            <div>
+                <h3 style="margin: 0; font-size: 1.5rem; font-weight: 900;">Dispatch Response</h3>
+                <p style="margin: 4px 0 0 0; color: var(--admin-muted); font-size: 0.9rem;">The student will be notified and the ticket will be marked as resolved.</p>
+            </div>
+            
+            <textarea id="reply-content" class="modal-textarea" placeholder="Type your official administrative response here..."></textarea>
+            
+            <div class="modal-actions">
+                <button class="btn-ghost" onclick="closeModal()">Abort</button>
+                <button class="btn-reply" id="send-trigger" onclick="submitReply()">Dispatch Reply ➔</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        let currentTicketId = null;
+
+        async function loadTickets() {
+            const queue = document.getElementById('ticket-queue');
+            const loader = document.getElementById('tickets-loading');
+            
+            queue.style.display = 'none';
+            loader.style.display = 'block';
+
+            try {
+                // Endpoint from Android: admin/support/manage/
+                const tickets = await Api.get('/admin/support/manage/', localStorage.getItem('accessToken'));
+                renderTickets(tickets);
+            } catch (err) {
+                queue.innerHTML = `<p style="color: #FF4D4D;">Telemetry failure: ${err.message}</p>`;
+            } finally {
+                loader.style.display = 'none';
+                queue.style.display = 'flex';
+            }
+        }
+
+        function renderTickets(tickets) {
+            const queue = document.getElementById('ticket-queue');
+            if (!tickets || tickets.length === 0) {
+                queue.innerHTML = '<div style="text-align: center; padding: 100px; color: var(--admin-muted);">No student support requests detected in the current sector.</div>';
+                return;
+            }
+
+            queue.innerHTML = '';
+            tickets.forEach(ticket => {
+                const card = document.createElement('div');
+                card.className = 'ticket-card';
+                
+                const initials = (ticket.user_name || 'U').charAt(0).toUpperCase();
+                const statusClass = ticket.is_resolved ? 'status-resolved' : 'status-pending';
+                const statusText = ticket.is_resolved ? 'Mission Resolved' : 'Priority Pending';
+
+                card.innerHTML = `
+                    <div class="ticket-meta">
+                        <div class="user-info">
+                            <div class="user-avatar-placeholder">${initials}</div>
+                            <div>
+                                <h4 style="margin: 0; font-weight: 800;">${ticket.user_name || 'Anonymous Student'}</h4>
+                                <p style="margin: 0; font-size: 0.8rem; color: var(--admin-muted);">${ticket.user_email}</p>
+                            </div>
+                        </div>
+                        <span class="status-pill ${statusClass}">${statusText}</span>
+                    </div>
+
+                    <div class="ticket-message">
+                        <p style="margin: 0;">${ticket.message}</p>
+                        <p style="margin-top: 12px; font-size: 0.75rem; color: rgba(255,255,255,0.3);">Received: ${ticket.created_at}</p>
+                    </div>
+
+                    ${ticket.admin_reply ? `
+                        <div class="admin-response">
+                            <span class="response-label">Administrative Response</span>
+                            <p class="response-text">"${ticket.admin_reply}"</p>
+                            <span style="font-size: 0.7rem; color: var(--admin-muted); opacity: 0.5;">Resolved at: ${ticket.replied_at}</span>
+                        </div>
+                    ` : `
+                        <button class="btn-reply" onclick="openModal(${ticket.id})">Execute Resolution</button>
+                    `}
+                `;
+                queue.appendChild(card);
+            });
+        }
+
+        function openModal(id) {
+            currentTicketId = id;
+            document.getElementById('reply-modal').style.display = 'flex';
+            document.getElementById('reply-content').focus();
+        }
+
+        function closeModal() {
+            document.getElementById('reply-modal').style.display = 'none';
+            document.getElementById('reply-content').value = '';
+            currentTicketId = null;
+        }
+
+        async function submitReply() {
+            const reply = document.getElementById('reply-content').value.trim();
+            if (!reply) return alert('Reply cannot be empty.');
+
+            const trigger = document.getElementById('send-trigger');
+            trigger.disabled = true;
+            trigger.textContent = 'Dispatching...';
+
+            try {
+                const payload = {
+                    ticket_id: currentTicketId,
+                    reply: reply,
+                    is_resolved: true
+                };
+
+                // Endpoint from Android: admin/support/manage/ (POST)
+                await Api.post('/admin/support/manage/', payload, localStorage.getItem('accessToken'));
+                
+                closeModal();
+                loadTickets();
+                alert('Success: Support resolution dispatched and synced.');
+            } catch (err) {
+                alert('Dispatch failure: ' + err.message);
+                trigger.disabled = false;
+                trigger.textContent = 'Dispatch Reply ➔';
+            }
+        }
+
+        window.onload = () => {
+            if (!Auth.isAuthenticated()) location.href = '../index.html';
+            loadTickets();
+        }
+    </script>
+</body>
+</html>

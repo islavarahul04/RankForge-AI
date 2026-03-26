@@ -1,0 +1,30 @@
+{
+  "model_name": "RankForge-Doubt-Solver-CGL-v1.0",
+  "base_model": "llama-3-8b-instruct",
+  "training_parameters": {
+    "learning_rate": 2e-5,
+    "epochs": 3,
+    "batch_size": 16,
+    "max_seq_len": 512,
+    "optimizer": "adamw_torch",
+    "lr_scheduler": "cosine"
+  },
+  "dataset_config": {
+    "train_file": "ssc_cgl_training_data.jsonl",
+    "eval_split": 0.1,
+    "test_split": 0.05,
+    "augmentation": true
+  },
+  "specialization": {
+    "domain": "SSC CGL Exam",
+    "categories": [
+      "Quantitative Aptitude",
+      "English Language",
+      "General Intelligence & Reasoning",
+      "General Awareness"
+    ],
+    "language": "English/Hindi"
+  },
+  "training_log_path": "./logs/training_cgl_v1.log",
+  "last_trained": "2026-03-25T09:33:45Z"
+}

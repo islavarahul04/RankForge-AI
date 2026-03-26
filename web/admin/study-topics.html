@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic Management | RankForge Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .main-content { margin-left: 300px; padding: 60px; }
+        .study-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+        .topic-card {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .topic-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.05); }
+        .topic-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body class="midnight-aurora">
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 48px;">RankForge Admin</div>
+            <nav style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <a href="dashboard.html" class="nav-item"><span>🏠</span> Overview</a>
+                <a href="users.html" class="nav-item"><span>👥</span> User Management</a>
+                <a href="tests.html" class="nav-item"><span>📝</span> Mock Tests</a>
+                <a href="resolutions.html" class="nav-item"><span></span> Support Tickets</a>
+                <a href="subscriptions.html" class="nav-item"><span>💳</span> Subscription Plans</a>
+                <a href="study.html" class="nav-item active"><span>📚</span> Study Content</a>
+            </nav>
+
+            <div class="user-profile" style="margin-top: 32px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="width: 44px; height: 44px; background: var(--secondary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white;">A</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <p id="admin-sidebar-name" style="margin: 0; color: white; font-weight: 700; font-size: 0.85rem; white-space: nowrap; text-overflow: ellipsis;">Admin</p>
+                    <button onclick="Auth.logout()" style="background: none; border: none; padding: 0; color: var(--accent); font-size: 0.75rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-top: 4px;">
+                        <span>🚪</span> Log out
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <header>
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+                    <a href="javascript:history.back()" class="text-muted" style="text-decoration: none;">← Back to Subjects</a>
+                </div>
+                <h1 id="subject-title" class="text-gradient" style="font-size: 2.5rem;">Topics</h1>
+                <p class="text-muted">Manage topics and concepts within this subject.</p>
+            </header>
+
+            <div id="topics-container" class="study-grid">
+                <!-- Topics will be loaded here -->
+            </div>
+            
+            <button class="btn btn-primary" style="margin-top: 40px; border-radius: 16px; padding: 16px 32px;" onclick="addTopic()">
+                + Add New Topic
+            </button>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const subjectId = params.get('id');
+        const subjectName = params.get('name');
+        
+        const user = Auth.getUser();
+        if (!Auth.isAuthenticated() || !user.is_staff) window.location.href = '../index.html';
+
+        if (subjectName) document.getElementById('subject-title').textContent = subjectName + ' Topics';
+
+        async function loadTopics() {
+            try {
+                const topics = await Api.get(`/admin/study/topics/?subject_id=${subjectId}`, localStorage.getItem('accessToken'));
+                const container = document.getElementById('topics-container');
+                
+                container.innerHTML = topics.map(topic => `
+                    <div class="glass topic-card" onclick="editConcept(${topic.id}, '${encodeURIComponent(JSON.stringify(topic))}')">
+                        <div class="topic-icon">📄</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0; color: white; font-size: 1.1rem;">${topic.name}</h3>
+                            <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-muted);">Manage concept & theory</p>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Failed to load topics:', err);
+            }
+        }
+
+        function editConcept(id, topicJson) {
+            localStorage.setItem('editingTopic', decodeURIComponent(topicJson));
+            window.location.href = 'study-concepts.html?id=' + id;
+        }
+
+        function addTopic() {
+            alert('Add Topic functionality coming soon');
+        }
+
+        window.onload = loadTopics;
+    </script>
+</body>
+</html>

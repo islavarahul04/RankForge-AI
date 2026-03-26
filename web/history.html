@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test History | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .main-content { margin-left: 300px; padding: 60px; }
+        
+        .history-list {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--primary);
+        }
+
+        .test-detail-group { display: flex; align-items: center; gap: 24px; }
+        
+        .score-orb {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 800;
+        }
+
+        .score-orb.pass { color: #10B981; border-color: rgba(16, 185, 129, 0.2); background: rgba(16, 185, 129, 0.05); }
+        .score-orb.fail { color: #F43F5E; border-color: rgba(244, 63, 94, 0.2); background: rgba(244, 63, 94, 0.05); }
+
+        .sidebar-avatar { width: 44px; height: 44px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; box-shadow: 0 4px 12px var(--primary-glow); }
+        .user-profile { margin-top: auto; display: flex; align-items: center; gap: 16px; padding: 24px; background: rgba(255, 255, 255, 0.03); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 64px;">RankForge AI</div>
+            <a href="dashboard.html" class="nav-item">Dashboard</a>
+            <a href="mock-tests.html" class="nav-item">Mock Tests</a>
+            <a href="history.html" class="nav-item active">Test History</a>
+            <a href="profile.html" class="nav-item">My Profile</a>
+            <a href="tickets.html" class="nav-item">Support</a>
+            <a href="study-zone.html" class="nav-item">Study Zone</a>
+            <a href="chat.html" class="nav-item">AI Tutor</a>
+            
+            <div class="user-profile">
+                <div class="sidebar-avatar" id="sidebar-avatar">?</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <button id="sidebar-name" style="background: none; border: none; color: white; font-weight: 700; width: 100%; text-align: left; cursor: pointer; padding: 0;">User</button>
+                    <div id="sidebar-membership" class="text-muted" style="font-size: 0.75rem;">Standard Member</div>
+                </div>
+                <button onclick="Auth.logout()" style="background: none; border: none; cursor: pointer; font-size: 1.2rem;">🚪</button>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 class="text-gradient">Performance Archive</h2>
+                    <p class="text-muted">Analyzing your evolution across the Forge.</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div class="glass" style="padding: 10px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="location.href='streak.html'">
+                        <span style="font-weight: 700;">Streak: <span id="user-streak" style="color: var(--secondary);">0</span> Days</span>
+                    </div>
+                    <div class="glass" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;" onclick="location.href='notifications.html'">
+                        <span>🔔</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="history-list" id="history-container">
+                <p class="text-muted" style="text-align: center; padding: 60px;">Scanning timeline...</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        async function initHistory() {
+            console.log('History: Initializing timeline...');
+            if (!Auth.isAuthenticated()) window.location.href = 'index.html';
+            
+            const token = localStorage.getItem('accessToken');
+            try {
+                // Fetch Profile for sidebar consistency
+                const user = await Api.get('/profile/', token);
+                console.log('History: User profile loaded:', user);
+                
+                Auth.updateUserUI(user);
+
+                // Sync streak
+                const streakData = await Api.get('/streak/', token);
+                console.log('History: Streak data:', streakData);
+                document.getElementById('user-streak').textContent = streakData.current_streak || 0;
+
+                // Fetch History
+                const results = await Api.get('/tests/history/', token);
+                console.log('History: Test history records:', results);
+                window.testHistoryData = results; // Store globally
+                renderHistory(results);
+            } catch (err) {
+                console.error('History: Critical failure:', err);
+                document.getElementById('history-container').innerHTML = `<p style="color:var(--accent); text-align: center; padding: 60px;">Timeline Error: ${err.message}</p>`;
+            }
+        }
+
+        function renderHistory(results) {
+            const container = document.getElementById('history-container');
+            if (!results || results.length === 0) {
+                container.innerHTML = '<p class="text-muted" style="text-align: center; padding: 60px;">Your timeline is empty. Begin your first Forge to see data.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            results.forEach(res => {
+                const div = document.createElement('div');
+                div.className = 'glass history-item animate-fade-in';
+                const accuracy = Math.round((res.score / (res.total_questions * 2)) * 100);
+                const isPass = accuracy >= 50;
+
+                div.innerHTML = `
+                    <div class="test-detail-group">
+                        <div class="score-orb ${isPass ? 'pass' : 'fail'}">
+                            <span style="font-size: 1.2rem;">${accuracy}%</span>
+                        </div>
+                        <div>
+                            <div style="font-weight: 800; font-size: 1.2rem; margin-bottom: 2px;">${res.test_name}</div>
+                            <div class="text-muted" style="font-size: 0.85rem; font-weight: 600;">
+                                ${new Date(res.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })} • ${res.score} PTS
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn-primary" style="padding: 10px 20px; font-size: 0.85rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); box-shadow: none;" onclick="viewDetailedIntel(${res.id})">
+                            Detailed Intel
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function viewAnalysis() {
+            alert('Analysis Protocol Initializing... (Detailed view coming soon)');
+        }
+
+        function viewDetailedIntel(id) {
+            const result = window.testHistoryData.find(r => r.id === id);
+            if (result) {
+                sessionStorage.setItem('lastResult', JSON.stringify(result));
+                window.location.href = 'result.html';
+            }
+        }
+
+        async function syncStreak() {
+            try {
+                const token = localStorage.getItem('accessToken');
+                if (!token) return;
+                const streakData = await Api.get('/streak/', token);
+                const el = document.getElementById('user-streak');
+                if (el) el.textContent = streakData.current_streak || 0;
+            } catch (err) {}
+        }
+        window.addEventListener('load', syncStreak);
+        window.onload = initHistory;
+    </script>
+</body>
+</html>

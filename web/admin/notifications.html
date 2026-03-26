@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broadcast Command Center | RankForge Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --admin-bg: #26348B;
+            --admin-card: rgba(255, 255, 255, 0.05);
+            --admin-glass: rgba(255, 255, 255, 0.1);
+            --admin-orange: #FF8C00;
+            --admin-text: #FFFFFF;
+            --admin-muted: #D0D5FF;
+        }
+
+        body {
+            background: var(--admin-bg);
+            color: var(--admin-text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .broadcast-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 48px;
+        }
+
+        .btn-back-circle {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-back-circle:hover { transform: scale(1.1); }
+
+        .form-card {
+            background: var(--admin-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 32px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .input-label {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            display: block;
+            color: var(--admin-text);
+        }
+
+        /* Category Selector */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .category-pill {
+            padding: 16px;
+            background: var(--admin-glass);
+            border-radius: 16px;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+        }
+
+        .category-pill.active {
+            background: white;
+            color: var(--admin-bg);
+            border-color: var(--admin-orange);
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .category-pill:not(.active):hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .category-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .active .category-icon {
+            background: var(--admin-bg);
+            color: white;
+        }
+
+        /* Message Area */
+        .premium-textarea {
+            width: 100%;
+            background: var(--admin-glass);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 24px;
+            color: white;
+            font-size: 1rem;
+            min-height: 250px;
+            margin-bottom: 32px;
+            transition: all 0.3s;
+            resize: vertical;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .premium-textarea:focus {
+            outline: none;
+            border-color: var(--admin-orange);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .btn-send-dispatch {
+            width: 100%;
+            background: var(--admin-orange);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 100px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.3);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-send-dispatch:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(255, 140, 0, 0.4);
+        }
+
+        .btn-send-dispatch:disabled {
+            opacity: 0.5;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--admin-muted);
+            margin-bottom: 8px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="broadcast-container">
+        <div class="header-section animate-fade-in">
+            <button class="btn-back-circle" onclick="location.href='dashboard.html'">
+                <span style="font-size: 1.2rem;">⬅️</span>
+            </button>
+            <div>
+                <h2 style="margin: 0; font-size: 1.8rem; font-weight: 900;">Broadcast Command</h2>
+                <p style="margin: 0; color: var(--admin-muted); font-size: 0.9rem;">Global notification dispatch system for the mission-critical alert network.</p>
+            </div>
+        </div>
+
+        <div class="form-card animate-fade-in">
+            <label class="input-label">Select Targeted Category</label>
+            <div class="category-grid" id="category-selector">
+                <div class="category-pill active" data-category="Tests" onclick="selectCategory(this)">
+                    <div class="category-icon">📝</div>
+                    <span>Tests & Exams</span>
+                </div>
+                <div class="category-pill" data-category="Study" onclick="selectCategory(this)">
+                    <div class="category-icon">📖</div>
+                    <span>Study Materials</span>
+                </div>
+                <div class="category-pill" data-category="Community" onclick="selectCategory(this)">
+                    <div class="category-icon">🤝</div>
+                    <span>Community Updates</span>
+                </div>
+                <div class="category-pill" data-category="Offers" onclick="selectCategory(this)">
+                    <div class="category-icon">🏷️</div>
+                    <span>Special Offers</span>
+                </div>
+            </div>
+
+            <label class="input-label">Broadcast Content</label>
+            <textarea id="broadcast-content" class="premium-textarea" placeholder="Draft your mission-critical alert message here..."></textarea>
+            
+            <button class="btn-send-dispatch" id="publish-trigger" onclick="sendBroadcast()">
+                <span>Send Broadcast Dispatch</span>
+                <span style="font-size: 1.2rem;">➔</span>
+            </button>
+        </div>
+
+        <div style="text-align: center;" class="animate-fade-in">
+            <div class="status-badge">
+                <span style="color: #4CAF50;">●</span> Global Synchronous Reach Enabled
+            </div>
+            <p style="font-size: 0.75rem; color: var(--admin-muted); opacity: 0.6;">Dispatching a broadcast will instantly notify all active users within the RankForge network.</p>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        let selectedCategory = 'Tests';
+
+        function selectCategory(element) {
+            document.querySelectorAll('.category-pill').forEach(pill => pill.classList.remove('active'));
+            element.classList.add('active');
+            selectedCategory = element.getAttribute('data-category');
+        }
+
+        async function sendBroadcast() {
+            const content = document.getElementById('broadcast-content').value.trim();
+            if (!content) return alert('Broadcast content cannot be empty.');
+
+            const trigger = document.getElementById('publish-trigger');
+            trigger.disabled = true;
+            trigger.querySelector('span').textContent = 'Dispatching Globally...';
+
+            try {
+                const payload = {
+                    title: "System Broadcast",
+                    message: content,
+                    category: selectedCategory
+                };
+
+                await Api.post('/admin/notifications/create/', payload, localStorage.getItem('accessToken'));
+                
+                alert('Success: Broadcast dispatched successfully to the entire network.');
+                location.href = 'dashboard.html';
+                
+            } catch (err) {
+                alert('Dispatch Failure: ' + err.message);
+                trigger.disabled = false;
+                trigger.querySelector('span').textContent = 'Send Broadcast Dispatch';
+            }
+        }
+
+        window.onload = () => {
+            if (!Auth.isAuthenticated()) location.href = '../index.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .main-content { margin-left: 300px; padding: 60px; }
+        
+        .admin-sidebar { background: rgba(15, 23, 42, 0.9); }
+        .stat-card.admin { border-left: 4px solid var(--secondary); }
+        
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .action-card {
+            padding: 32px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .action-card:hover { 
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .action-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .action-label { font-weight: 800; font-size: 0.95rem; color: white; }
+
+        .sidebar-avatar {
+            width: 44px;
+            height: 44px;
+            background: var(--accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar admin-sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 48px;">RankForge Admin</div>
+            
+            <nav style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <a href="dashboard.html" class="nav-item active"><span>🏠</span> Overview</a>
+                <a href="users.html" class="nav-item"><span>👥</span> User Management</a>
+                <a href="tests-manage.html" class="nav-item"><span>📝</span> Mock Tests</a>
+                <a href="resolutions.html" class="nav-item"><span>🎟️</span> Support Tickets</a>
+                <a href="subscriptions.html" class="nav-item"><span>💳</span> Subscription Plans</a>
+                <a href="study.html" class="nav-item"><span>📚</span> Study Content</a>
+            </nav>
+            
+            <div class="user-profile" style="margin-top: 32px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="sidebar-avatar">A</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <p id="admin-sidebar-name" style="margin: 0; color: white; font-weight: 700; font-size: 0.85rem; white-space: nowrap; text-overflow: ellipsis;">Admin</p>
+                    <button onclick="Auth.logout()" style="background: none; border: none; padding: 0; color: var(--accent); font-size: 0.75rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-top: 4px;">
+                        <span>🚪</span> Log out
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h1 class="text-gradient" style="font-size: 2.5rem; display: flex; align-items: center; gap: 16px;">
+                        Control Center
+                        <span style="font-size: 0.7rem; background: #4CAF50; color: white; padding: 4px 12px; border-radius: 100px; letter-spacing: 0.1em; font-weight: 900; vertical-align: middle;">LIVE PLATFORM</span>
+                    </h1>
+                    <p class="text-muted">High-level metrics and system orchestration.</p>
+                </div>
+                <div id="sync-indicator" style="font-size: 0.75rem; color: #4CAF50; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #4CAF50; border-radius: 50%; box-shadow: 0 0 10px #4CAF50;"></span>
+                    Backend Synced
+                </div>
+            </header>
+
+            <div class="stats-grid" style="margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px;">
+                <!-- Total Users -->
+                <div class="glass stat-card admin animate-fade-in" style="animation-delay: 0.1s; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px;">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <span id="trend-users" class="status-pill" style="font-size: 0.7rem; padding: 4px 12px; border-radius: 100px;">--</span>
+                        <span class="stat-label" style="font-size: 0.85rem; opacity: 0.7; letter-spacing: 0.05em; text-transform: uppercase;">Total Users</span>
+                    </div>
+                    <span class="stat-value text-gradient" id="admin-stat-users" style="font-size: 3rem; font-weight: 900;">0</span>
+                </div>
+
+                <!-- Active Today -->
+                <div class="glass stat-card admin animate-fade-in" style="animation-delay: 0.2s; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px;">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <span id="trend-active" class="status-pill" style="font-size: 0.7rem; padding: 4px 12px; border-radius: 100px;">--</span>
+                        <span class="stat-label" style="font-size: 0.85rem; opacity: 0.7; letter-spacing: 0.05em; text-transform: uppercase;">Active Today</span>
+                    </div>
+                    <span class="stat-value text-gradient" id="admin-stat-active" style="--primary: #4CAF50; --secondary: #8BC34A; font-size: 3rem; font-weight: 900;">0</span>
+                </div>
+
+                <!-- Revenue -->
+                <div class="glass stat-card admin animate-fade-in" style="animation-delay: 0.3s; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px;">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <span id="trend-revenue" class="status-pill" style="font-size: 0.7rem; padding: 4px 12px; border-radius: 100px;">--</span>
+                        <span class="stat-label" style="font-size: 0.85rem; opacity: 0.7; letter-spacing: 0.05em; text-transform: uppercase;">Revenue</span>
+                    </div>
+                    <span class="stat-value text-gradient" id="admin-stat-revenue" style="--primary: #FFD600; --secondary: #FFAB00; font-size: 3rem; font-weight: 900;">₹0</span>
+                </div>
+
+                <!-- Tests Taken -->
+                <div class="glass stat-card admin animate-fade-in" style="animation-delay: 0.4s; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px;">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <span id="trend-tests" class="status-pill" style="font-size: 0.7rem; padding: 4px 12px; border-radius: 100px;">--</span>
+                        <span class="stat-label" style="font-size: 0.85rem; opacity: 0.7; letter-spacing: 0.05em; text-transform: uppercase;">Tests Taken</span>
+                    </div>
+                    <span class="stat-value text-gradient" id="admin-stat-tests" style="--primary: #F48FB1; --secondary: #F06292; font-size: 3rem; font-weight: 900;">0</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 64px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.9rem;">Management Protocols</h3>
+            <div class="quick-actions-grid">
+                <div class="glass action-card animate-fade-in" onclick="window.location.href='users.html?action=add'">
+                    <div class="action-icon">👤</div>
+                    <span class="action-label">Add Member</span>
+                </div>
+                <div class="glass action-card animate-fade-in" onclick="window.location.href='tests.html?action=upload'">
+                    <div class="action-icon">📝</div>
+                    <span class="action-label">Upload Data</span>
+                </div>
+                <div class="glass action-card animate-fade-in" onclick="window.location.href='reports.html'">
+                    <div class="action-icon">📊</div>
+                    <span class="action-label">Analytics</span>
+                </div>
+                <div class="glass action-card animate-fade-in" onclick="window.location.href='broadcast.html'">
+                    <div class="action-icon">🔔</div>
+                    <span class="action-label">Broadcast</span>
+                </div>
+                <div class="glass action-card animate-fade-in" onclick="window.location.href='pyq.html'">
+                    <div class="action-icon">📁</div>
+                    <span class="action-label">PYQ Papers</span>
+                </div>
+                <div class="glass action-card animate-fade-in" onclick="window.location.href='resolutions.html'">
+                    <div class="action-icon">🎟️</div>
+                    <span class="action-label">Resolutions</span>
+                </div>
+                <div class="glass action-card animate-fade-in" onclick="window.location.href='subscriptions.html'">
+                    <div class="action-icon">💳</div>
+                    <span class="action-label">Subscriptions</span>
+                </div>
+                <div class="glass action-card animate-fade-in" onclick="window.location.href='study.html'">
+                    <div class="action-icon">📚</div>
+                    <span class="action-label">Study Content</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 64px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.9rem;">Recent Activity</h3>
+            <div id="recent-activity-container" class="glass" style="margin-top: 24px; border-radius: 24px; padding: 32px; min-height: 200px; margin-bottom: 64px;">
+                <p id="activity-loader" class="text-muted">Loading telemetry data...</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/api.js?v=2.2"></script>
+    <script src="../js/auth.js?v=2.2"></script>
+    <script>
+        const user = Auth.getUser();
+        if (!Auth.isAuthenticated() || !user.is_staff) {
+            window.location.href = '../index.html';
+        }
+
+        function updateTrend(elId, value) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            el.textContent = value || '--';
+            if (value && value.includes('+')) {
+                el.style.background = 'rgba(76, 175, 80, 0.1)';
+                el.style.color = '#4CAF50';
+                el.style.border = '1px solid rgba(76, 175, 80, 0.2)';
+            } else if (value && value.includes('-')) {
+                el.style.background = 'rgba(244, 67, 54, 0.1)';
+                el.style.color = '#F44336';
+                el.style.border = '1px solid rgba(244, 67, 54, 0.2)';
+            }
+        }
+
+        async function initAdmin() {
+            document.getElementById('admin-sidebar-name').textContent = user.full_name || user.email;
+            
+            try {
+                // Correct endpoint for real-time stats
+                const stats = await Api.get('/admin/dashboard-stats/', localStorage.getItem('accessToken'));
+                
+                // Value Mapping
+                document.getElementById('admin-stat-users').textContent = (stats.total_users || 0).toLocaleString();
+                document.getElementById('admin-stat-active').textContent = (stats.active_today || 0).toLocaleString();
+                document.getElementById('admin-stat-revenue').textContent = '₹' + (stats.revenue || 0).toLocaleString();
+                document.getElementById('admin-stat-tests').textContent = (stats.tests_taken || 0).toLocaleString();
+
+                // Trend Mapping
+                updateTrend('trend-users', stats.total_users_percentage);
+                updateTrend('trend-active', stats.active_today_percentage);
+                updateTrend('trend-revenue', stats.revenue_percentage);
+                updateTrend('trend-tests', stats.tests_taken_percentage);
+
+                renderRecentActivity(stats.recent_activity);
+
+            } catch (err) {
+                console.error('Failed to fetch admin stats:', err);
+            }
+        }
+
+        function renderRecentActivity(activities) {
+            const container = document.getElementById('recent-activity-container');
+            if (!activities || activities.length === 0) {
+                container.innerHTML = '<p class="text-muted">No recent activity detected.</p>';
+                return;
+            }
+
+            container.innerHTML = activities.map(act => `
+                <div style="display: flex; align-items: center; gap: 20px; padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <div style="width: 44px; height: 44px; background: rgba(79, 70, 229, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        ${act.category === 'Subscription' ? '💳' : (act.category === 'Test' ? '📝' : '👤')}
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <strong style="color: white; font-size: 0.95rem;">${act.title}</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${new Date(act.created_at).toLocaleString()}</span>
+                        </div>
+                        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-muted);">${act.message}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.onload = initAdmin;
+    </script>
+</body>
+</html>

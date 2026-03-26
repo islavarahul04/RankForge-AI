@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PYQ Management | RankForge Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --admin-bg: #26348B;
+            --admin-card: rgba(255, 255, 255, 0.05);
+            --admin-glass: rgba(255, 255, 255, 0.1);
+            --admin-orange: #FF8C00;
+            --admin-text: #FFFFFF;
+            --admin-muted: #D0D5FF;
+        }
+
+        body {
+            background: var(--admin-bg);
+            color: var(--admin-text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .pyq-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 48px;
+        }
+
+        .btn-back-circle {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .tab-switcher {
+            display: flex;
+            background: var(--admin-glass);
+            padding: 6px;
+            border-radius: 100px;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            padding: 10px 24px;
+            border-radius: 100px;
+            border: none;
+            background: none;
+            color: var(--admin-muted);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--admin-bg);
+        }
+
+        /* List View */
+        .pyq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .paper-card {
+            background: var(--admin-card);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .paper-card:hover { border-color: var(--admin-orange); transform: translateY(-4px); }
+
+        .paper-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .btn-delete {
+            background: rgba(255, 77, 77, 0.1);
+            color: #FF4D4D;
+            border: 1px solid rgba(255, 77, 77, 0.2);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-delete:hover { background: #FF4D4D; color: white; }
+
+        /* Form View */
+        .upload-form {
+            background: var(--admin-card);
+            border-radius: 32px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+
+        .premium-input {
+            background: var(--admin-glass);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 16px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .premium-input:focus { outline: none; border-color: var(--admin-orange); }
+
+        .file-dropzone {
+            height: 150px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-dropzone:hover { background: var(--admin-glass); border-color: var(--admin-orange); }
+
+        .btn-post {
+            background: var(--admin-orange);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-post:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255, 140, 0, 0.4); }
+
+    </style>
+</head>
+<body>
+    <div class="pyq-container">
+        <div class="header-section animate-fade-in">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <button class="btn-back-circle" onclick="location.href='dashboard.html'">
+                    <span style="font-size: 1.2rem;">⬅️</span>
+                </button>
+                <h2 style="margin: 0; font-size: 1.8rem; font-weight: 900;">PYQ Command</h2>
+            </div>
+            <div class="tab-switcher">
+                <button class="tab-btn active" id="tab-browse" onclick="switchTab('browse')">Browse</button>
+                <button class="tab-btn" id="tab-upload" onclick="switchTab('upload')">Upload</button>
+            </div>
+        </div>
+
+        <div id="view-browse" class="animate-fade-in">
+            <div class="pyq-grid" id="pyq-list">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+
+        <div id="view-upload" style="display: none;" class="animate-fade-in">
+            <div class="upload-form">
+                <div class="input-group">
+                    <label style="font-weight: 700; color: var(--admin-muted);">Paper Title</label>
+                    <input type="text" id="paper-title" class="premium-input" placeholder="e.g. SSC CHSL 2023 Tier 1 (Morning Shift)">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="input-group">
+                        <label style="font-weight: 700; color: var(--admin-muted);">Exam Category</label>
+                        <input type="text" id="paper-category" class="premium-input" placeholder="e.g. SSC CHSL">
+                    </div>
+                    <div class="input-group">
+                        <label style="font-weight: 700; color: var(--admin-muted);">Paper Year</label>
+                        <input type="number" id="paper-year" class="premium-input" placeholder="e.g. 2023">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label style="font-weight: 700; color: var(--admin-muted);">Paper PDF</label>
+                    <div class="file-dropzone" onclick="document.getElementById('file-input').click()">
+                        <span id="file-label" style="font-size: 2.5rem;">📄</span>
+                        <p id="file-name" style="margin: 0; font-weight: 600;">Select PYQ PDF Document</p>
+                        <input type="file" id="file-input" hidden accept=".pdf" onchange="handleFile(this)">
+                    </div>
+                </div>
+                <button class="btn-post" onclick="postPaper()">Post PYQ PaperDispatch ➔</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        function switchTab(tab) {
+            document.getElementById('view-browse').style.display = tab === 'browse' ? 'block' : 'none';
+            document.getElementById('view-upload').style.display = tab === 'upload' ? 'block' : 'none';
+            document.getElementById('tab-browse').classList.toggle('active', tab === 'browse');
+            document.getElementById('tab-upload').classList.toggle('active', tab === 'upload');
+            if (tab === 'browse') loadPapers();
+        }
+
+        async function loadPapers() {
+            const list = document.getElementById('pyq-list');
+            list.innerHTML = '<p>Retrieving paper inventory...</p>';
+            try {
+                const papers = await Api.get('/pyq-papers/', localStorage.getItem('accessToken'));
+                renderPapers(papers);
+            } catch (err) {
+                list.innerHTML = `<p style="color: #FF4D4D;">System Error: ${err.message}</p>`;
+            }
+        }
+
+        function renderPapers(papers) {
+            const list = document.getElementById('pyq-list');
+            if (!papers || papers.length === 0) {
+                list.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No PYQ papers in inventory.</p>';
+                return;
+            }
+            list.innerHTML = '';
+            papers.forEach(paper => {
+                const card = document.createElement('div');
+                card.className = 'paper-card';
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div class="paper-icon">📄</div>
+                        <button class="btn-delete" onclick="deletePaper(${paper.id})">Remove</button>
+                    </div>
+                    <div>
+                        <h4 style="margin: 0; font-size: 1.1rem; font-weight: 900;">${paper.title}</h4>
+                        <p style="margin: 4px 0 0 0; color: var(--admin-muted); font-size: 0.8rem;">${paper.exam_category} • ${paper.year}</p>
+                    </div>
+                    <a href="${paper.file}" target="_blank" style="color: var(--admin-orange); font-size: 0.85rem; font-weight: 700; text-decoration: none;">View Document ↗</a>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function handleFile(input) {
+            if (input.files && input.files[0]) {
+                document.getElementById('file-name').textContent = input.files[0].name;
+                document.getElementById('file-label').textContent = '✅';
+            }
+        }
+
+        async function postPaper() {
+            const title = document.getElementById('paper-title').value.trim();
+            const category = document.getElementById('paper-category').value.trim();
+            const year = document.getElementById('paper-year').value.trim();
+            const file = document.getElementById('file-input').files[0];
+
+            if (!title || !category || !year || !file) return alert('All fields including PDF are mandatory.');
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('exam_category', category);
+            formData.append('year', year);
+            formData.append('file', file);
+
+            try {
+                // We need to use raw fetch here because our Api.js helper might not handle FormData multipart properly without explicit check
+                const response = await fetch(`${Api.baseUrl}/pyq-papers/`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` },
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error(await response.text());
+                
+                alert('Success: PYQ paper posted to database.');
+                switchTab('browse');
+            } catch (err) {
+                alert('Upload Failure: ' + err.message);
+            }
+        }
+
+        async function deletePaper(id) {
+            if (!confirm('Are you sure you want to remove this mission-critical document?')) return;
+            try {
+                await fetch(`${Api.baseUrl}/pyq-papers/${id}/`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
+                });
+                loadPapers();
+            } catch (err) {
+                alert('Delete Failure: ' + err.message);
+            }
+        }
+
+        window.onload = () => loadPapers();
+    </script>
+</body>
+</html>

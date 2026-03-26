@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Results | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .result-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .score-hero {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+            border-radius: 40px;
+            margin-bottom: 32px;
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 8px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            position: relative;
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        .score-circle::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 8px solid var(--primary);
+            border-top-color: transparent;
+            transform: rotate(45deg);
+        }
+
+        .score-value { font-size: 3rem; font-weight: 900; line-height: 1; }
+        .score-total { color: var(--text-muted); font-size: 1.1rem; }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            padding: 24px;
+            text-align: center;
+        }
+
+        .metric-value { font-size: 1.6rem; font-weight: 800; display: block; margin-bottom: 4px; }
+        .metric-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        .sections-breakdown {
+            margin-top: 40px;
+        }
+
+        .section-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 32px;
+            margin-bottom: 16px;
+        }
+
+        .section-info { display: flex; align-items: center; gap: 16px; }
+        .section-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+        
+        .progress-bar-container {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            margin: 0 40px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 1s ease-out;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 48px;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container animate-fade-in">
+        <div class="score-hero glass">
+            <div id="result-status" style="margin-bottom: 16px; font-weight: 800; color: var(--secondary); letter-spacing: 2px; font-size: 0.9rem;">PERFORMANCE REPORT</div>
+            <div class="score-circle">
+                <div class="score-value text-gradient" id="score-val">0</div>
+                <div class="score-total">out of <span id="total-val">0</span></div>
+            </div>
+            <h2 id="congrats-text" style="font-size: 1.8rem; margin-bottom: 8px;">Analyzing Results...</h2>
+            <p class="text-muted" id="test-name-display" style="font-weight: 600;">Mock Test Performance</p>
+        </div>
+
+        <div class="analysis-grid">
+            <div class="glass metric-card">
+                <span class="metric-value" id="correct-val" style="color: var(--success);">0</span>
+                <span class="metric-label">Correct</span>
+            </div>
+            <div class="glass metric-card">
+                <span class="metric-value" id="incorrect-val" style="color: var(--accent);">0</span>
+                <span class="metric-label">Incorrect</span>
+            </div>
+            <div class="glass metric-card">
+                <span class="metric-value text-gradient" id="accuracy-val">0%</span>
+                <span class="metric-label">Accuracy</span>
+            </div>
+        </div>
+
+        <div class="sections-breakdown">
+            <h3 style="margin-bottom: 24px; font-weight: 900;">Sectional Intel</h3>
+            
+            <!-- English -->
+            <div class="glass section-card">
+                <div class="section-info">
+                    <div class="section-icon" style="background: rgba(59, 130, 246, 0.1); color: #3B82F6;">EN</div>
+                    <div style="font-weight: 700;">English Language</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-fill" id="pb-eng" style="width: 0%; background: #3B82F6;"></div>
+                </div>
+                <div style="font-weight: 800;" id="score-eng">0 / 50</div>
+            </div>
+
+            <!-- Quantitative -->
+            <div class="glass section-card">
+                <div class="section-info">
+                    <div class="section-icon" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">QA</div>
+                    <div style="font-weight: 700;">Quantitative Aptitude</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-fill" id="pb-quant" style="width: 0%; background: #10B981;"></div>
+                </div>
+                <div style="font-weight: 800;" id="score-quant">0 / 50</div>
+            </div>
+
+            <!-- Reasoning -->
+            <div class="glass section-card">
+                <div class="section-info">
+                    <div class="section-icon" style="background: rgba(168, 85, 247, 0.1); color: #A855F7;">GI</div>
+                    <div style="font-weight: 700;">General Intelligence</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-fill" id="pb-reason" style="width: 0%; background: #A855F7;"></div>
+                </div>
+                <div style="font-weight: 800;" id="score-reason">0 / 50</div>
+            </div>
+
+            <!-- GK -->
+            <div class="glass section-card">
+                <div class="section-info">
+                    <div class="section-icon" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">GA</div>
+                    <div style="font-weight: 700;">General Awareness</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-fill" id="pb-gk" style="width: 0%; background: #F59E0B;"></div>
+                </div>
+                <div style="font-weight: 800;" id="score-gk">0 / 50</div>
+            </div>
+        </div>
+
+        <div class="action-group">
+            <button class="btn-primary" style="flex: 1;" onclick="viewSolutions()">Analyze Mistakes</button>
+            <button class="btn-primary" style="flex: 1; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); box-shadow: none;" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const result = JSON.parse(sessionStorage.getItem('lastResult'));
+            if (!result) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            console.log('Result Data:', result);
+
+            const score = result.score || 0;
+            const totalQ = result.total_questions || 100;
+            const totalMarks = totalQ * 2;
+            const correct = result.correct_count || 0;
+            const incorrect = result.incorrect_count || 0;
+            const accuracy = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+
+            document.getElementById('score-val').textContent = score;
+            document.getElementById('total-val').textContent = totalMarks;
+            document.getElementById('correct-val').textContent = correct;
+            document.getElementById('incorrect-val').textContent = incorrect;
+            document.getElementById('accuracy-val').textContent = accuracy + '%';
+            document.getElementById('test-name-display').textContent = result.test_name || "Mock Test Performance";
+
+            // Congratulatory text logic
+            const congrats = document.getElementById('congrats-text');
+            if (accuracy >= 80) congrats.textContent = "Elite Performance!";
+            else if (accuracy >= 60) congrats.textContent = "Great Work!";
+            else if (accuracy >= 40) congrats.textContent = "Good Effort!";
+            else congrats.textContent = "Keep Practicing!";
+
+            // Sectional Scores
+            const sections = [
+                { id: 'eng', val: result.eng_score || 0 },
+                { id: 'quant', val: result.quant_score || 0 },
+                { id: 'reason', val: result.reason_score || 0 },
+                { id: 'gk', val: result.gk_score || 0 }
+            ];
+
+            sections.forEach(s => {
+                document.getElementById(`score-${s.id}`).textContent = `${s.val} / 50`;
+                setTimeout(() => {
+                    document.getElementById(`pb-${s.id}`).style.width = `${(s.val/50)*100}%`;
+                }, 300);
+            });
+        });
+
+        function viewSolutions() {
+            const result = JSON.parse(sessionStorage.getItem('lastResult'));
+            if (result && result.test_id) {
+                // We'll pass both test_id and attempt_id if needed, but test_id + result.id is best
+                window.location.href = `solution.html?test_id=${result.test_id}&attempt_id=${result.id}`;
+            } else {
+                alert('Detailed solutions not available for this attempt.');
+            }
+        }
+    </script>
+</body>
+</html>

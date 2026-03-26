@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placeholder | RankForge Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .admin-sidebar { background: #1A237E; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar admin-sidebar">
+            <div class="nav-brand" style="color: white; -webkit-text-fill-color: white; margin-bottom: 48px;">RankForge Admin</div>
+            <a href="dashboard.html" class="nav-item">Overview</a>
+            <a href="users.html" class="nav-item">User Management</a>
+            <a href="tests.html" class="nav-item">Mock Tests</a>
+            <a href="tickets.html" class="nav-item">Support Tickets</a>
+            <a href="settings.html" class="nav-item">System Settings</a>
+        </div>
+        <main class="main-content">
+            <header>
+                <h2 id="page-title">Page Title</h2>
+                <p class="text-muted">This module is currently being initialized.</p>
+            </header>
+            <div class="glass" style="margin-top: 40px; padding: 60px; text-align: center;">
+                <span style="font-size: 3rem;">🏗️</span>
+                <h3 style="margin-top: 24px;">Sector Under Construction</h3>
+                <p class="text-muted">We are currently calibrating this administrative protocol. Please check back shortly.</p>
+                <button class="btn-primary" style="margin-top: 24px;" onclick="history.back()">Go Back</button>
+            </div>
+        </main>
+    </div>
+    <script>
+        const filename = window.location.pathname.split('/').pop().replace('.html', '');
+        document.getElementById('page-title').textContent = filename.charAt(0).toUpperCase() + filename.slice(1);
+    </script>
+</body>
+</html>

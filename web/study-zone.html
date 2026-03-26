@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Zone | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .subject-card {
+            padding: 32px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .topic-list {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .topic-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .topic-item.completed {
+            border-color: rgba(16, 185, 129, 0.2);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .topic-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .completed .topic-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .topic-checkbox::after {
+            content: '✓';
+            color: white;
+            font-size: 0.7rem;
+            display: none;
+        }
+
+        .completed .topic-checkbox::after {
+            display: block;
+        }
+
+        .subject-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-brand text-gradient" style="margin-bottom: 48px;">RankForge AI</div>
+            <a href="dashboard.html" class="nav-item">Dashboard</a>
+            <a href="mock-tests.html" class="nav-item">Mock Tests</a>
+            <a href="history.html" class="nav-item">Test History</a>
+            <a href="profile.html" class="nav-item">My Profile</a>
+            <a href="tickets.html" class="nav-item">Support</a>
+            <a href="study-zone.html" class="nav-item active">Study Zone</a>
+            <a href="chat.html" class="nav-item">AI Tutor</a>
+            
+            <div class="user-profile" style="margin-top: auto; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 20px;">
+                <div class="sidebar-avatar" id="sidebar-avatar">?</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <button id="sidebar-name" style="background: none; border: none; color: white; font-weight: 700; width: 100%; text-align: left; cursor: pointer; padding: 0;">Loading...</button>
+                    <div class="text-muted" style="font-size: 0.75rem;" id="sidebar-membership">Premium Member</div>
+                </div>
+                <button onclick="Auth.logout()" style="background: none; border: none; cursor: pointer; color: white; opacity: 0.5; font-size: 1.2rem;">🚪</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 class="text-gradient" style="font-size: 2.5rem;">Study Pulse</h1>
+                    <p class="text-muted">Master your syllabus with structured topic-wise learning tracks.</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div class="glass" style="padding: 10px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="location.href='streak.html'">
+                        <span style="font-weight: 700;">Streak: <span id="user-streak" style="color: var(--secondary);">0</span> Days</span>
+                    </div>
+                    <div class="glass" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;" onclick="location.href='notifications.html'">
+                        <span>🔔</span>
+                    </div>
+                </div>
+            </header>
+
+            <div id="subjects-container" class="subjects-grid">
+                <!-- Subjects will be injected here -->
+                <div class="text-muted" style="text-align: center; grid-column: 1/-1; padding: 100px;">
+                    Calibrating your study tracks...
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/study-zone.js"></script>
+    <script>
+        async function syncStreak() {
+            try {
+                const token = localStorage.getItem('accessToken');
+                if (!token) return;
+                const streakData = await Api.get('/streak/', token);
+                const el = document.getElementById('user-streak');
+                if (el) el.textContent = streakData.current_streak || 0;
+            } catch (err) {}
+        }
+        window.addEventListener('load', syncStreak);
+    </script>
+</body>
+</html>

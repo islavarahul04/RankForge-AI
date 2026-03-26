@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .notifications-container { max-width: 800px; margin: 60px auto; padding: 0 40px; }
+        
+        .notif-card {
+            padding: 24px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .notif-card:hover { transform: translateX(10px); background: rgba(255,255,255,0.04); }
+
+        .notif-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .notif-body { flex: 1; }
+        .notif-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .notif-title { font-weight: 800; font-size: 1.1rem; }
+        .notif-time { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; }
+        .notif-desc { color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div class="notifications-container">
+        <header style="margin-bottom: 48px; display: flex; align-items: center; gap: 20px;">
+            <button class="glass" style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;" onclick="history.back()">←</button>
+            <div>
+                <h1 class="text-gradient">System Signals</h1>
+                <p class="text-muted">Broadcasts from the RankForge network.</p>
+            </div>
+        </header>
+
+        <div id="notif-list">
+            <p class="text-muted" style="text-align: center; padding: 60px;">Scanning for incoming signals...</p>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        async function loadNotifications() {
+            if (!Auth.isAuthenticated()) location.href = 'index.html';
+            
+            const container = document.getElementById('notif-list');
+            try {
+                const notifications = await Api.get('/notifications/', localStorage.getItem('accessToken'));
+                if (!notifications || notifications.length === 0) {
+                    container.innerHTML = '<p class="text-muted" style="text-align: center; padding: 60px;">The network is quiet. No active alerts found.</p>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                notifications.forEach(n => {
+                    const card = document.createElement('div');
+                    card.className = 'glass notif-card animate-fade-in';
+                    const icon = n.type === 'test' ? '📝' : n.type === 'streak' ? '🔥' : '📢';
+                    
+                    card.innerHTML = `
+                        <div class="notif-icon">${icon}</div>
+                        <div class="notif-body">
+                            <div class="notif-header">
+                                <span class="notif-title">${n.title}</span>
+                                <span class="notif-time">${new Date(n.created_at).toLocaleDateString()}</span>
+                            </div>
+                            <p class="notif-desc">${n.message}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                container.innerHTML = `<p style="color:var(--accent); text-align:center;">Signal Interference: ${err.message}</p>`;
+            }
+        }
+
+        window.onload = loadNotifications;
+    </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Streak | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .streak-container { max-width: 800px; margin: 60px auto; text-align: center; }
+        
+        .streak-visual {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .streak-fire {
+            font-size: 8rem;
+            filter: drop-shadow(0 0 30px rgba(239, 68, 68, 0.4));
+            margin-bottom: 20px;
+        }
+
+        .streak-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .day-box {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .day-box.active {
+            background: linear-gradient(135deg, var(--secondary), #F59E0B);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="streak-container animate-fade-in">
+        <header style="margin-bottom: 48px; display: flex; align-items: center; justify-content: center; gap: 20px;">
+            <button class="glass" style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;" onclick="location.href='dashboard.html'">←</button>
+            <h1 class="text-gradient">Study Streak</h1>
+        </header>
+
+        <div class="streak-visual">
+            <div class="streak-fire">🔥</div>
+            <div style="font-size: 3.5rem; font-weight: 900;" id="streak-count">0</div>
+            <div class="text-muted" style="font-weight: 800; letter-spacing: 2px;">DAY STREAK</div>
+        </div>
+
+        <div class="streak-stats">
+            <div class="glass" style="padding: 32px; border-radius: 28px;">
+                <span style="font-size: 1.5rem; font-weight: 800; display: block;" id="max-streak">0</span>
+                <span class="text-muted" style="font-size: 0.8rem; font-weight: 700;">BEST STREAK</span>
+            </div>
+            <div class="glass" style="padding: 32px; border-radius: 28px;">
+                <span style="font-size: 1.5rem; font-weight: 800; display: block;" id="tests-today">0</span>
+                <span class="text-muted" style="font-size: 0.8rem; font-weight: 700;">TESTS TODAY</span>
+            </div>
+        </div>
+
+        <div class="glass" style="padding: 40px; border-radius: 32px;">
+            <h3 style="text-align: left; margin-bottom: 24px;">Consistency Map</h3>
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- Dynamically generated -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        async function loadStreak() {
+            if (!Auth.isAuthenticated()) location.href = 'index.html';
+            try {
+                const data = await Api.get('/streak/', localStorage.getItem('accessToken'));
+                document.getElementById('streak-count').textContent = data.current_streak || 0;
+                document.getElementById('max-streak').textContent = data.max_streak || 0;
+                
+                const grid = document.getElementById('calendar-grid');
+                grid.innerHTML = '';
+                
+                const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+                const activity = data.activity_map || {}; // { "2026-03-12": true }
+
+                // Show last 14 days
+                for (let i = 13; i >= 0; i--) {
+                    const d = new Date();
+                    d.setDate(d.getDate() - i);
+                    const dateStr = d.toISOString().split('T')[0];
+                    
+                    const box = document.createElement('div');
+                    box.className = `day-box ${activity[dateStr] ? 'active' : ''}`;
+                    box.textContent = days[d.getDay()];
+                    grid.appendChild(box);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        window.onload = loadStreak;
+    </script>
+</body>
+</html>

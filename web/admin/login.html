@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | RankForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .admin-login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .admin-card {
+            width: 100%;
+            max-width: 450px;
+            padding: 48px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .admin-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(168, 85, 247, 0.1);
+            color: #A855F7;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-login-container" style="background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.15), transparent 600px); background-color: #020617;">
+        <div class="admin-card glass animate-fade-in" style="border-top: 6px solid #A855F7; background: rgba(15, 23, 42, 0.95);">
+            <div class="admin-badge" style="background: #A855F7; color: white;">ADMINISTRATIVE SYSTEM</div>
+            <h1 class="text-gradient" style="font-size: 3rem; margin-bottom: 8px; --primary: #A855F7; --secondary: #EC4899; letter-spacing: -2px;">Admin Login</h1>
+            <p class="text-muted" style="margin-bottom: 40px; font-weight: 600; font-size: 1.1rem; color: #A855F7;">RankForge AI Control Center</p>
+
+            <form id="admin-login-form">
+                <div class="input-group">
+                    <label>Admin ID (Email)</label>
+                    <input type="email" id="admin-email" placeholder="admin@rankforge.ai" required>
+                </div>
+                <div class="input-group">
+                    <label>Security Key</label>
+                    <input type="password" id="admin-password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 12px; background: linear-gradient(135deg, #A855F7 0%, #7C3AED 100%);">
+                    Authorize Access
+                </button>
+            </form>
+
+            <p id="auth-error" style="color: var(--accent); font-size: 0.9rem; margin-top: 24px; text-align: center; font-weight: 600;" class="hidden"></p>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <a href="../index.html" class="text-muted" style="text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-muted)'">
+                    Return to User Portal
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>console.log('Admin login page initialized.');</script>
+    <script src="../js/api.js?v=1.2"></script>
+    <script src="../js/auth.js?v=1.2"></script>
+</body>
+</html>
