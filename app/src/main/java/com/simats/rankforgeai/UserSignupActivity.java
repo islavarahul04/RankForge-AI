@@ -95,16 +95,19 @@ public class UserSignupActivity extends AppCompatActivity {
                             try {
                                 if (response.errorBody() != null) {
                                     String errorJson = response.errorBody().string();
-                                    // Basic extraction of DRF error messages
+                                    // Detailed extraction of DRF error messages
                                     if (errorJson.contains("email")) {
                                         errorMessage += " Email already exists or is invalid.";
                                     } else if (errorJson.contains("password")) {
                                         errorMessage += " Password does not meet security requirements.";
                                     } else {
-                                        errorMessage += " Please check your details.";
+                                        // Show raw error if it's something else
+                                        errorMessage += " " + errorJson;
                                     }
                                 }
-                            } catch (Exception ignored) {}
+                            } catch (Exception e) {
+                                errorMessage += " Error: " + e.getMessage();
+                            }
                             Toast.makeText(UserSignupActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                         }
                     }
