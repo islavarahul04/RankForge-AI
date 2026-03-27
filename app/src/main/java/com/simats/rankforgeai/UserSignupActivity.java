@@ -91,7 +91,21 @@ public class UserSignupActivity extends AppCompatActivity {
                             startActivity(intent);
                             finishAffinity(); // Clear stack
                         } else {
-                            Toast.makeText(UserSignupActivity.this, "Signup failed. Email might exist.", Toast.LENGTH_SHORT).show();
+                            String errorMessage = "Signup failed.";
+                            try {
+                                if (response.errorBody() != null) {
+                                    String errorJson = response.errorBody().string();
+                                    // Basic extraction of DRF error messages
+                                    if (errorJson.contains("email")) {
+                                        errorMessage += " Email already exists or is invalid.";
+                                    } else if (errorJson.contains("password")) {
+                                        errorMessage += " Password does not meet security requirements.";
+                                    } else {
+                                        errorMessage += " Please check your details.";
+                                    }
+                                }
+                            } catch (Exception ignored) {}
+                            Toast.makeText(UserSignupActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                         }
                     }
 
