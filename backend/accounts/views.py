@@ -44,39 +44,50 @@ class LoginView(views.APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        
-        # Restore standard authentication for both users and admins
-        user = authenticate(email=email, password=password)
-        
-        if user:
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                'user': UserSerializer(user, context={'request': request}).data,
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-            })
-        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
-class AdminLoginView(views.APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        user = authenticate(email=email, password=password)
-        if user:
-            if user.is_staff or user.is_superuser or user.is_admin:
+        try:
+            email = request.data.get('email')
+            password = request.data.get('password')
+            
+            user = authenticate(email=email, password=password)
+            
+            if user:
                 refresh = RefreshToken.for_user(user)
                 return Response({
                     'user': UserSerializer(user, context={'request': request}).data,
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
                 })
-            else:
-                return Response({'error': 'Unauthorized! Admin credentials required.'}, status=status.HTTP_403_FORBIDDEN)
-        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            import traceback
+            print(f"Login Error: {str(e)}")
+            print(traceback.format_exc())
+            return Response({'error': str(e), 'traceback': traceback.format_exc()}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class AdminLoginView(views.APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            email = request.data.get('email')
+            password = request.data.get('password')
+            user = authenticate(email=email, password=password)
+            if user:
+                if user.is_staff or user.is_superuser or user.is_admin:
+                    refresh = RefreshToken.for_user(user)
+                    return Response({
+                        'user': UserSerializer(user, context={'request': request}).data,
+                        'refresh': str(refresh),
+                        'access': str(refresh.access_token),
+                    })
+                else:
+                    return Response({'error': 'Unauthorized! Admin credentials required.'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            import traceback
+            print(f"Admin Login Error: {str(e)}")
+            print(traceback.format_exc())
+            return Response({'error': str(e), 'traceback': traceback.format_exc()}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AdminDashboardStatsView(views.APIView):
     permission_classes = [IsAuthenticated]

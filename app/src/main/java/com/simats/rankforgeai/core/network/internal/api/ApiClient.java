@@ -6,7 +6,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static final String NGROK_URL = "https://kindra-venulose-innoxiously.ngrok-free.dev/api/";
+    private static final String NGROK_URL = "http://180.235.121.253:8124/api/";
     private static final String EMULATOR_URL = "http://10.0.2.2:8000/api/";
     private static Retrofit retrofit = null;
 
