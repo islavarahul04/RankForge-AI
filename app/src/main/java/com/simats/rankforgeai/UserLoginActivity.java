@@ -115,13 +115,18 @@ public class UserLoginActivity extends AppCompatActivity {
                                  .apply();
 
                             Intent intent;
+                            boolean isPremium = response.body().getUser() != null && response.body().getUser().isPremium();
+
                             if (hasGoal && hasName) {
                                 // Full profile registered - Bypass Setup completely
                                 intent = new Intent(UserLoginActivity.this, HomeActivity.class);
-                            } else if (hasGoal && !hasName) {
-                                // Goal Selected but no Name - Send to Home with Profile Setup Dialog
+                            } else if (isPremium || (hasGoal && !hasName)) {
+                                // Premium users or users with a goal but no name - Send to Home 
+                                // We show the popup only if name is missing AND it's not a premium bypass
                                 intent = new Intent(UserLoginActivity.this, HomeActivity.class);
-                                intent.putExtra("SHOW_PROFILE_POPUP", true);
+                                if (!hasName && !isPremium) {
+                                    intent.putExtra("SHOW_PROFILE_POPUP", true);
+                                }
                             } else {
                                 // Incomplete registration - Force Goal Selection Flow
                                 intent = new Intent(UserLoginActivity.this, SelectGoalActivity.class);
