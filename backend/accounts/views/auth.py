@@ -40,7 +40,7 @@ class LoginView(views.APIView):
             if user:
                 refresh = RefreshToken.for_user(user)
                 return Response({
-                    'user': UserSerializer(user, context={'request': request}).data,
+                    # 'user': UserSerializer(user, context={'request': request}).data,
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
                 })
