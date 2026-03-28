@@ -142,7 +142,8 @@ public class UserLoginActivity extends AppCompatActivity {
                                         // Simple extraction of error message from JSON
                                         errorMessage = errorJson.split("\"error\":\"")[1].split("\"")[0];
                                     } else {
-                                        errorMessage = "Error Code: " + response.code();
+                                        // Show truncated HTML error (helpful for debugging 500s)
+                                        errorMessage = "500 Err: " + (errorJson.length() > 100 ? errorJson.substring(0, 100) : errorJson);
                                     }
                                 } else {
                                     errorMessage = "Status: " + response.code();
