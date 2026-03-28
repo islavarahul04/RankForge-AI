@@ -10,6 +10,7 @@ router.register(r'admin/study/topics', study.AdminStudyTopicViewSet, basename='a
 
 urlpatterns = [
     # Auth
+    path('health/', auth.HealthCheckView.as_view(), name='health_check'),
     path('auth/register/', auth.RegisterView.as_view(), name='register'),
     path('auth/login/', auth.LoginView.as_view(), name='login'),
     path('admin/login/', auth.AdminLoginView.as_view(), name='admin_login'),

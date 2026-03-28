@@ -70,6 +70,19 @@ def repair():
     else:
         print(" [OK] Secret key is set.")
 
+    # 5. Simulate HTTP Request (to catch Middleware/URL issues)
+    print("\n[5/4] Simulating HTTP Login Request...")
+    try:
+        from django.test import Client
+        c = Client()
+        r = c.post('/api/auth/login/', {'email': 'testuser@example.com', 'password': 'WrongPassword'}, content_type='application/json')
+        print(f" [OK] HTTP Response Status: {r.status_code}")
+        if r.status_code == 500:
+            print(" [!] DETECTED 500 ERROR IN HTTP RESPONSE!")
+            print(f" Body: {r.content[:200]}")
+    except Exception as e:
+        print(f" [ERROR] HTTP SIMULATION FAILED: {e}")
+
     print("\n--- Repair Complete! ---")
     print("If you still see 500 errors, check your WSGI/Gunicorn logs.")
     print("Start server: python manage.py runserver 0.0.0.0:8124")

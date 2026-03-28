@@ -12,6 +12,11 @@ from ..serializers import UserSerializer, RegistrationSerializer
 
 User = get_user_model()
 
+class HealthCheckView(views.APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        return Response({"status": "ok", "message": "API is reachable"})
+
 class RegisterView(views.APIView):
     permission_classes = [AllowAny]
 
