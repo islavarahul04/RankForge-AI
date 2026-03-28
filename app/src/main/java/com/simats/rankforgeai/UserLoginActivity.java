@@ -134,7 +134,23 @@ public class UserLoginActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
-                            Toast.makeText(UserLoginActivity.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+                            String errorMessage = "Login failed";
+                            try {
+                                if (response.errorBody() != null) {
+                                    String errorJson = response.errorBody().string();
+                                    if (errorJson.contains("error")) {
+                                        // Simple extraction of error message from JSON
+                                        errorMessage = errorJson.split("\"error\":\"")[1].split("\"")[0];
+                                    } else {
+                                        errorMessage = "Error Code: " + response.code();
+                                    }
+                                } else {
+                                    errorMessage = "Status: " + response.code();
+                                }
+                            } catch (Exception e) {
+                                errorMessage = "Network Error (" + response.code() + ")";
+                            }
+                            Toast.makeText(UserLoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                         }
                     }
 
