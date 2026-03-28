@@ -1,15 +1,19 @@
---- RankForge AI: API Testing Information ---
+--- RankForge AI: Universal API Testing Information ---
 
-CURRENT DJANGO SERVER LINK (RESTORED NGROK): 
-https://kindra-venulose-innoxiously.ngrok-free.dev/api/
+CURRENT SERVER LINK: 
+https://kindra-venulose-innoxiously.ngrok-free.dev
 
-COMMON ENDPOINTS:
-- Register: POST https://kindra-venulose-innoxiously.ngrok-free.dev/api/auth/register/
-- Login:    POST https://kindra-venulose-innoxiously.ngrok-free.dev/api/auth/login/
-- Exams:    GET  https://kindra-venulose-innoxiously.ngrok-free.dev/api/exams/categories/
+The app and website now automatically handle the formatting. 
+You can simply paste your IP or Ngrok link into the 'SERVER_URL' constant in:
+1. Android: ApiClient.java
+2. Web: js/api.js
+
+COMMON TEST ENDPOINTS (Auto-formatted):
+- Register: [ServerURL]/api/auth/register/
+- Login:    [ServerURL]/api/auth/login/
+- Exams:    [ServerURL]/api/exams/categories/
 
 NOTE FOR DEVELOPERS:
-Always include the trailing slash (/) at the end of every URL.
-Always include the "/api/" prefix after the domain.
-Ensure 'Content-Type: application/json' is set for POST/PUT requests.
-Ensure 'ngrok-skip-browser-warning: 69420' is set in headers if testing with external tools.
+- The app now automatically appends '/api/' and fixes trailing slashes.
+- If using an Emulator, it automatically switches to 'http://10.0.2.2:8000'.
+- Ngrok headers are included by default to prevent warning screens.

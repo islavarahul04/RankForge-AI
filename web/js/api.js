@@ -1,8 +1,23 @@
-const API_BASE_URL = 'https://kindra-venulose-innoxiously.ngrok-free.dev/api';
+// Universal API Configuration for RankForge AI
+// Change 'SERVER_URL' to your current server address (IP, Ngrok, or Domain)
+const SERVER_URL = 'https://kindra-venulose-innoxiously.ngrok-free.dev';
+
+// Automatically format the Base URL
+function getBaseUrl(url) {
+    let cleanUrl = url.trim();
+    if (!cleanUrl.endsWith('/')) cleanUrl += '/';
+    if (!cleanUrl.toLowerCase().endsWith('/api/')) cleanUrl += 'api';
+    return cleanUrl;
+}
+
+const API_BASE_URL = getBaseUrl(SERVER_URL);
 
 const Api = {
     async request(method, endpoint, data = null, token = null) {
-        const headers = { 'Content-Type': 'application/json' };
+        const headers = { 
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': '69420' // Support for Ngrok testing
+        };
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
         const options = {
@@ -12,7 +27,9 @@ const Api = {
         if (data) options.body = JSON.stringify(data);
 
         try {
-            const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+            // Ensure endpoint starts with /
+            const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+            const response = await fetch(`${API_BASE_URL}${path}`, options);
             
             const contentType = response.headers.get("content-type");
             let result;
