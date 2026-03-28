@@ -16,7 +16,7 @@ public class ApiClient {
     
     // --- SERVER CONFIGURATION ---
     // Change this to your current server address (IP, Ngrok, or Domain)
-    private static final String SERVER_URL = "https://kindra-venulose-innoxiously.ngrok-free.dev";
+    private static final String SERVER_URL = "http://180.235.121.253:8124";
     
     // Default Emulator address for local testing
     private static final String EMULATOR_URL = "http://10.0.2.2:8000";

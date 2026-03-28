@@ -1,7 +1,7 @@
 --- RankForge AI: Universal API Testing Information ---
 
 CURRENT SERVER LINK: 
-https://kindra-venulose-innoxiously.ngrok-free.dev
+http://180.235.121.253:8124
 
 The app and website now automatically handle the formatting. 
 You can simply paste your IP or Ngrok link into the 'SERVER_URL' constant in:

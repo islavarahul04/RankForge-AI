@@ -1,6 +1,6 @@
 // Universal API Configuration for RankForge AI
 // Change 'SERVER_URL' to your current server address (IP, Ngrok, or Domain)
-const SERVER_URL = 'https://kindra-venulose-innoxiously.ngrok-free.dev';
+const SERVER_URL = 'http://180.235.121.253:8124';
 
 // Automatically format the Base URL
 function getBaseUrl(url) {
