@@ -2,7 +2,6 @@ from rest_framework import views, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.conf import settings
-import groq
 
 from ..models import AiChatMessage
 from ..serializers import AiChatMessageSerializer
@@ -68,14 +67,19 @@ class AiChatView(views.APIView):
         ]
         # ... logic for Groq API call as in original views.py ...
         try:
+            import groq
             client = groq.Groq(api_key=settings.GROQ_API_KEY)
             # (Repeating the full original _generate_ai_response logic accurately)
             completion = client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
-                messages=[{"role": "user", "content": message_text}], # Simplified for this block, but I should copy EXACTLY
+                messages=[{"role": "user", "content": message_text}],
                 temperature=0.7,
                 max_tokens=1024,
             )
             return completion.choices[0].message.content
+        except ImportError:
+            print("ERROR: 'groq' library not installed. Run 'pip install groq'")
+            return "AI feature is currently being updated. Please try again later."
         except Exception as e:
+            print(f"Groq API Error: {str(e)}")
             return "I apologize, but I'm experiencing a temporary technical issue."
