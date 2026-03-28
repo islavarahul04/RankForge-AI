@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://180.235.121.253:8124/api';
+const API_BASE_URL = 'https://kindra-venulose-innoxiously.ngrok-free.dev/api';
 
 const Api = {
     async request(method, endpoint, data = null, token = null) {

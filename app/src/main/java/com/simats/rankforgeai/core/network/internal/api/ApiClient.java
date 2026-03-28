@@ -12,8 +12,8 @@ import com.google.gson.GsonBuilder;
  */
 public class ApiClient {
     // --- Configuration ---
-    // Change this URL whenever your server address changes
-    private static final String BASE_URL = "http://180.235.121.253:8124/api/";
+    // Previous Django Server Link (Ngrok)
+    private static final String BASE_URL = "https://kindra-venulose-innoxiously.ngrok-free.dev/api/";
     
     private static Retrofit retrofit = null;
 
@@ -32,6 +32,7 @@ public class ApiClient {
                     .addInterceptor(chain -> chain.proceed(chain.request().newBuilder()
                             .addHeader("Accept", "application/json")
                             .addHeader("Content-Type", "application/json")
+                            .addHeader("ngrok-skip-browser-warning", "69420") // Bypass Ngrok warning page
                             .build()))
                     .build();
 

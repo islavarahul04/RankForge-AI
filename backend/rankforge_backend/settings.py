@@ -172,4 +172,4 @@ DEFAULT_FROM_EMAIL = 'RankForge AI <your-email@gmail.com>'
 GROQ_API_KEY = 'your-groq-api-key-here'
 
 # Backend URL for testing/reference
-SITE_URL = 'http://180.235.121.253:8124'
+SITE_URL = 'https://kindra-venulose-innoxiously.ngrok-free.dev'
