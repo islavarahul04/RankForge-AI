@@ -4,7 +4,8 @@ import django
 from django.core.management import call_command
 
 # Setup Django
-sys.path.append(os.path.join(os.getcwd(), 'backend'))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(BASE_DIR)
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'rankforge_backend.settings')
 django.setup()
 
