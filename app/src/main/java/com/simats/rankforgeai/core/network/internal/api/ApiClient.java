@@ -63,6 +63,17 @@ public class ApiClient {
     }
 
     /**
+     * Returns the server URL without the /api/ suffix (for media/images).
+     */
+    public static String getServerUrl() {
+        String baseUrl = getBaseUrl();
+        if (baseUrl.endsWith("/api/")) {
+            return baseUrl.substring(0, baseUrl.length() - 4);
+        }
+        return baseUrl;
+    }
+
+    /**
      * Helper to detect if the app is running on an Android Emulator.
      */
     private static boolean isEmulator() {
