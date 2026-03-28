@@ -91,23 +91,22 @@ public class UserSignupActivity extends AppCompatActivity {
                             startActivity(intent);
                             finishAffinity(); // Clear stack
                         } else {
-                            String errorMessage = "Signup failed (Code: " + response.code() + ")";
+                            String errorMessage = "Signup failed.";
                             try {
                                 if (response.errorBody() != null) {
                                     String errorJson = response.errorBody().string();
+                                    // Detailed extraction of DRF error messages
                                     if (errorJson.contains("email")) {
-                                        errorMessage = "Email already exists! Please use a different email.";
+                                        errorMessage += " Email already exists or is invalid.";
                                     } else if (errorJson.contains("password")) {
-                                        errorMessage = "Password too weak! Needs 8+ chars, Number, Special & Upper case.";
-                                    } else if (errorJson.contains("error")) {
-                                        // Handle structured error { "error": "message" }
-                                        errorMessage = errorJson;
+                                        errorMessage += " Password does not meet security requirements.";
                                     } else {
-                                        errorMessage += ": " + errorJson;
+                                        // Show raw error if it's something else
+                                        errorMessage += " " + errorJson;
                                     }
                                 }
                             } catch (Exception e) {
-                                errorMessage += " Parse error.";
+                                errorMessage += " Error: " + e.getMessage();
                             }
                             Toast.makeText(UserSignupActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                         }
