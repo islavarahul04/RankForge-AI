@@ -1,0 +1,14 @@
+--- RankForge AI: API Testing Information ---
+
+CURRENT DJANGO SERVER LINK (For Testing): 
+http://180.235.121.253:8124/api/
+
+COMMON ENDPOINTS:
+- Register: POST http://180.235.121.253:8124/api/auth/register/
+- Login:    POST http://180.235.121.253:8124/api/auth/login/
+- Exams:    GET  http://180.235.121.253:8124/api/exams/categories/
+
+NOTE FOR DEVELOPERS:
+Always include the trailing slash (/) at the end of every URL.
+Always include the "/api/" prefix after the port number.
+Ensure 'Content-Type: application/json' is set for POST/PUT requests.
